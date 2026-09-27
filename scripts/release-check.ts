@@ -15,7 +15,9 @@ export function audit(c: typeof cfg): Item[] {
   if (!c.checkout.provider) items.push({ level: "BLOQUEIA", what: "provedor de pagamento" });
   if (!c.checkout.orderStatusEndpoint)
     items.push({ level: "BLOQUEIA", what: "endpoint de status do pedido no servidor (confirmação de pagamento)" });
-  if (!c.screenshots.length) items.push({ level: "BLOQUEIA", what: "telas reais do CRM (screenshots)" });
+  if (!c.heroShot) items.push({ level: "BLOQUEIA", what: "tela real principal do CRM (heroShot)" });
+  const semTela = c.deepDives.filter((d) => !d.shot).map((d) => d.id);
+  if (semTela.length) items.push({ level: "pendente", what: `telas reais das seções: ${semTela.join(", ")} (hoje com desenho esquemático)` });
   if (!c.links.login) items.push({ level: "pendente", what: "link oficial do acesso de clientes" });
   if (!c.links.whatsapp) items.push({ level: "pendente", what: "WhatsApp comercial" });
   if (!c.GTM_ID) items.push({ level: "pendente", what: "GTM ID" });

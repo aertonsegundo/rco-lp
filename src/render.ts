@@ -61,46 +61,82 @@ export function renderNav(c = cfg): string {
 
 export function renderHero(c = cfg): string {
   const cta = primaryCta(c);
-  const shot = c.screenshots[0];
-  return `<div class="hero__text">
-          <p class="eyebrow">${esc(c.copy.heroEyebrow)}</p>
+  const shot = c.heroShot;
+  return `<p class="pill-label">${esc(c.copy.heroEyebrow)}</p>
           <h1 class="hero__title">${esc(c.copy.heroTitle)}</h1>
+          <p class="hero__kicker">${esc(c.copy.heroKicker)}</p>
           <p class="hero__lead">${esc(c.copy.heroLead)}</p>
           <div class="hero__actions">
             ${link(cta.label, cta.href, "cta_principal", "hero", "btn btn--primary")}
-            ${c.links.whatsapp ? link("Falar com a RCO", c.links.whatsapp, "whatsapp", "hero", "btn btn--ghost") : ""}
-          </div>
-        </div>${
-          shot
-            ? `
-        <figure class="hero__shot"><img src="${esc(shot.src)}" alt="${esc(shot.alt)}" width="${shot.width}" height="${shot.height}" fetchpriority="high" /></figure>`
-            : ""
-        }`;
+            ${c.links.whatsapp ? link("Falar com a RCO", c.links.whatsapp, "whatsapp", "hero", "btn btn--soft") : ""}
+          </div>${
+            shot
+              ? `
+          <figure class="hero__shot"><img src="${esc(shot.src)}" alt="${esc(shot.alt)}" width="${shot.width}" height="${shot.height}" fetchpriority="high" /></figure>`
+              : ""
+          }`;
 }
 
-export function renderFeatures(c = cfg): string {
-  return c.features
+/** Desenhos esquemáticos (só formas), trocados pela tela real quando ela existir. */
+export function art(kind: cfg.Art): string {
+  const b = 'fill="#fff" stroke="#c9dcfb" stroke-width="2"';
+  const blue = "#0d67f0";
+  const shapes: Record<cfg.Art, string> = {
+    inbox: `<rect x="20" y="70" width="70" height="44" rx="10" fill="${blue}"/><path d="M40 114l-6 12 16-12" fill="${blue}"/>
+      <path d="M92 92h40" stroke="${blue}" stroke-width="3" stroke-dasharray="6 6"/>
+      <rect x="134" y="40" width="112" height="104" rx="14" ${b}/><rect x="150" y="58" width="80" height="10" rx="5" fill="#dbe7fd"/><rect x="150" y="78" width="60" height="10" rx="5" fill="#dbe7fd"/><rect x="150" y="98" width="72" height="10" rx="5" fill="#dbe7fd"/><rect x="150" y="118" width="50" height="10" rx="5" fill="#dbe7fd"/>
+      <path d="M248 92h26" stroke="${blue}" stroke-width="3" stroke-dasharray="6 6"/>
+      <circle cx="296" cy="52" r="16" fill="#dbe7fd"/><circle cx="296" cy="92" r="16" fill="${blue}"/><circle cx="296" cy="132" r="16" fill="#dbe7fd"/>`,
+    funnel: `<rect x="16" y="30" width="96" height="124" rx="12" ${b}/><rect x="124" y="30" width="96" height="124" rx="12" ${b}/><rect x="232" y="30" width="96" height="124" rx="12" ${b}/>
+      <rect x="28" y="44" width="72" height="30" rx="8" fill="#dbe7fd"/><rect x="28" y="82" width="72" height="30" rx="8" fill="#dbe7fd"/>
+      <rect x="136" y="44" width="72" height="30" rx="8" fill="${blue}"/>
+      <rect x="244" y="44" width="72" height="30" rx="8" fill="#dbe7fd"/><rect x="244" y="82" width="72" height="30" rx="8" fill="#dbe7fd"/><rect x="244" y="120" width="72" height="24" rx="8" fill="#dbe7fd"/>
+      <path d="M100 59c14 0 18 0 36 0" stroke="${blue}" stroke-width="3" stroke-dasharray="5 5"/>`,
+    origin: `<rect x="16" y="64" width="80" height="56" rx="12" fill="${blue}"/><path d="M40 84l20 8-20 8z" fill="#fff"/>
+      <path d="M98 92h34" stroke="${blue}" stroke-width="3" stroke-dasharray="6 6"/>
+      <rect x="134" y="64" width="80" height="56" rx="12" ${b}/><rect x="148" y="80" width="52" height="8" rx="4" fill="#dbe7fd"/><rect x="148" y="96" width="36" height="8" rx="4" fill="#dbe7fd"/>
+      <path d="M216 92h34" stroke="${blue}" stroke-width="3" stroke-dasharray="6 6"/>
+      <circle cx="286" cy="92" r="32" fill="#dbe7fd"/><path d="M272 93l10 10 18-20" fill="none" stroke="${blue}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`,
+    automation: `<rect x="20" y="30" width="88" height="40" rx="10" fill="#1e3a6b"/><rect x="236" y="30" width="88" height="40" rx="10" fill="#1e3a6b"/>
+      <rect x="128" y="72" width="88" height="40" rx="10" fill="${blue}"/><rect x="20" y="114" width="88" height="40" rx="10" fill="#1e3a6b"/><rect x="236" y="114" width="88" height="40" rx="10" fill="#1e3a6b"/>
+      <path d="M108 50c20 0 20 42 20 42M216 92c20 0 20-42 20-42M108 134c20 0 20-42 20-42M216 92c20 0 20 42 20 42" fill="none" stroke="#5b8fe8" stroke-width="3" stroke-dasharray="6 6"/>`,
+  };
+  return `<svg class="art" viewBox="0 0 344 184" aria-hidden="true" focusable="false">${shapes[kind]}</svg>`;
+}
+
+export function renderPillars(c = cfg): string {
+  return c.pillars
     .map(
-      (f) => `<li class="feature">
-            <p class="feature__problem">${esc(f.problem)}</p>
-            <h3 class="feature__resource">${esc(f.resource)}</h3>
-            <p class="feature__benefit">${esc(f.benefit)}</p>
+      (p) => `<li class="pillar">
+            <h3>${esc(p.title)}</h3>
+            <p>${esc(p.text)}</p>
+            <div class="pillar__art">${art(p.art)}</div>
           </li>`,
     )
     .join("\n          ");
 }
 
-/** Telas reais: seção inteira some sem screenshot (nada de mockup). */
-export function renderDemo(c = cfg): string {
-  if (!c.screenshots.length) return "";
-  return `<section class="section" id="produto" aria-labelledby="produto-title">
-      <div class="container">
-        <h2 id="produto-title" class="section__title">O CRM por dentro</h2>
-        <div class="shots">${c.screenshots
-          .map((s) => `<figure><img src="${esc(s.src)}" alt="${esc(s.alt)}" width="${s.width}" height="${s.height}" loading="lazy" /></figure>`)
-          .join("")}</div>
+const check =
+  '<svg class="check" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+export function renderDeepDives(c = cfg): string {
+  return c.deepDives
+    .map((d, i) => {
+      const visual = d.shot
+        ? `<img src="${esc(d.shot.src)}" alt="${esc(d.shot.alt)}" width="${d.shot.width}" height="${d.shot.height}" loading="lazy" />`
+        : art(d.art);
+      return `<section class="dive${d.dark ? " dive--dark" : ""}${i % 2 ? " dive--flip" : ""}" id="${esc(d.id)}" aria-labelledby="${esc(d.id)}-title">
+      <div class="container dive__inner">
+        <div class="dive__visual">${visual}</div>
+        <div class="dive__text">
+          <p class="eyebrow">${esc(d.problem)}</p>
+          <h2 id="${esc(d.id)}-title" class="dive__title">${esc(d.title)}</h2>
+          <ul class="checks" role="list">${d.points.map((pt) => `<li>${check}<span>${esc(pt)}</span></li>`).join("")}</ul>
+        </div>
       </div>
     </section>`;
+    })
+    .join("\n\n    ");
 }
 
 export function renderSteps(c = cfg): string {
@@ -134,7 +170,7 @@ function list(title: string, items: string[]): string {
 }
 
 export function renderTrust(c = cfg): string {
-  return c.trust.map((t) => `<li><h3>${esc(t.title)}</h3><p>${esc(t.text)}</p></li>`).join("\n          ");
+  return c.trust.map((t) => `<li>${check}<div><h3>${esc(t.title)}</h3><p>${esc(t.text)}</p></div></li>`).join("\n          ");
 }
 
 export function renderTestimonials(c = cfg): string {
@@ -166,8 +202,10 @@ export const slots: Record<string, () => string> = {
   head: () => renderHead(),
   nav: () => renderNav(),
   hero: () => renderHero(),
-  features: () => renderFeatures(),
-  demo: () => renderDemo(),
+  pillars: () => renderPillars(),
+  dives: () => renderDeepDives(),
+  "pillars-title": () => esc(cfg.copy.pillarsTitle),
+  "closing-title": () => esc(cfg.copy.closingTitle),
   steps: () => renderSteps(),
   plans: () => renderPlans(),
   trust: () => renderTrust(),

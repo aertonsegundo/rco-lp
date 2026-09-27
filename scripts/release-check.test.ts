@@ -14,7 +14,7 @@ describe("release-check", () => {
       ...cfg,
       plans: [{ id: "pro", name: "Pro", priceCents: 100, currency: "BRL" as const, period: "mês", features: [], limits: [], addons: [], checkoutUrl: "https://pay.example.com/p" }],
       checkout: { provider: "x", orderStatusEndpoint: "https://api.example.com/s" },
-      screenshots: [{ src: "a.webp", alt: "Tela", width: 1, height: 1 }],
+      heroShot: { src: "a.webp", alt: "Tela", width: 1, height: 1 },
     };
     expect(blocks(full)).toEqual([]);
   });

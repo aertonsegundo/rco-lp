@@ -76,55 +76,117 @@ export const copy = {
   description:
     "CRM da RCO para organizar atendimento, funil de vendas e origem dos leads no WhatsApp, com integrações de venda e conversões.",
   heroEyebrow: "CRM RCO",
-  heroTitle: "Atendimento e vendas pelo WhatsApp, organizados num só lugar",
+  heroTitle: "Atendimento e vendas pelo WhatsApp num só lugar",
+  heroKicker: "Para empresas que atendem e vendem pelo WhatsApp",
   heroLead:
-    "Para empresas que atendem e vendem pelo WhatsApp: conversas do time, funil de vendas e origem de cada lead no mesmo sistema.",
+    "Conversas do time, funil de vendas e origem de cada lead no mesmo sistema, conectado à API oficial do WhatsApp.",
+  pillarsTitle: "Tudo o que o time comercial usa no dia a dia",
+  closingTitle: "Organize o atendimento e as vendas do seu time no WhatsApp",
 };
 
-export interface Feature {
-  problem: string;
-  resource: string;
-  benefit: string;
+export interface Shot {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 }
 
-/** Problema real → recurso real → benefício prático. Status no PLANO-DE-EXECUCAO.md entre parênteses. */
-export const features: Feature[] = [
+/** Desenho esquemático exibido enquanto não houver tela real (não imita interface nem dados). */
+export type Art = "inbox" | "funnel" | "origin" | "automation";
+
+/** Três frentes (cards de abertura). */
+export const pillars: { title: string; text: string; art: Art }[] = [
   {
-    // Inbox compartilhada (base wacrm) + CN1 conexão oficial.
-    problem: "Conversas espalhadas em vários celulares",
-    resource: "Caixa de entrada compartilhada na API oficial do WhatsApp, com responsável por conversa",
-    benefit: "O time atende pelo mesmo número e cada conversa tem dono.",
+    title: "Atendimento",
+    text: "O time atende pelo mesmo número de WhatsApp, com responsável e histórico em cada conversa.",
+    art: "inbox",
   },
   {
-    // AT1 distribuição (✅), AT2 escalonamento (✅), AT4 horário comercial (✅).
-    problem: "Lead esperando sem resposta",
-    resource: "Distribuição automática de leads, escalonamento por tempo e horário comercial",
-    benefit: "Todo novo contato chega a alguém, e o que atrasa é redirecionado.",
+    title: "Funil de vendas",
+    text: "Negócios em etapas, ligados às conversas, com follow-up que para quando o cliente responde.",
+    art: "funnel",
   },
   {
-    // Funis kanban (base wacrm) + CV1 deal como fonte do faturamento (✅).
-    problem: "Não saber em que etapa está cada negociação",
-    resource: "Funis de vendas em kanban, com negócios ligados às conversas",
-    benefit: "Visão clara do que está em andamento e do que foi ganho.",
+    title: "Origem e resultado",
+    text: "Cada lead chega com a campanha de origem, e as vendas voltam como conversão para Meta e Google Ads.",
+    art: "origin",
+  },
+];
+
+export interface DeepDive {
+  id: string;
+  /** O problema que a seção resolve. */
+  problem: string;
+  title: string;
+  /** Só recursos com status "entregue" no PLANO-DE-EXECUCAO.md (código entre parênteses no comentário). */
+  points: string[];
+  art: Art;
+  /** PENDING_BUSINESS_CONFIGURATION: tela real desta área. null = mostra o desenho esquemático. */
+  shot: Shot | null;
+  dark?: boolean;
+}
+
+export const deepDives: DeepDive[] = [
+  {
+    // Inbox (base wacrm), CN1, AT1 ✅, AT2 ✅, AT4 ✅, MR3 ✅, MR4 ✅.
+    id: "atendimento",
+    problem: "Para quando as conversas estão espalhadas em vários celulares",
+    title: "Atendimento em equipe na API oficial do WhatsApp",
+    points: [
+      "Caixa de entrada compartilhada, com responsável por conversa",
+      "Distribuição automática de novos leads entre os atendentes",
+      "Escalonamento quando a resposta demora",
+      "Horário comercial e atendimento fora do expediente",
+      "Painéis por atendente e por setor",
+    ],
+    art: "inbox",
+    shot: null,
   },
   {
-    // EN2 régua de follow-up (🟢), automações e fluxos (base wacrm).
-    problem: "Contatos esquecidos depois da primeira conversa",
-    resource: "Régua de follow-up que para quando o cliente responde, e automações por gatilho",
-    benefit: "Retomar contatos sem depender de lembrete manual.",
+    // Funis kanban e broadcasts (base wacrm), CV1 ✅, CV2 ✅, EN2 🟢.
+    id: "funil",
+    problem: "Para quando ninguém sabe em que etapa está cada venda",
+    title: "Funil de vendas ligado às conversas",
+    points: [
+      "Funis em kanban com as etapas da sua empresa",
+      "Negócios ligados ao contato e à conversa",
+      "Vendas da Hotmart, da Kiwify e da Eduzz entram como negócio ganho",
+      "Régua de follow-up que para quando o cliente responde",
+      "Disparos com modelos de mensagem aprovados pela Meta",
+    ],
+    art: "funnel",
+    shot: null,
   },
   {
-    // RA1 CTWA (✅), RA2 links UTM (✅), RA3 atribuição (✅), CV2 checkouts (✅), CV4 CAPI (🟢), CV5 Google Ads (🟢), CV6 ROAS (🟢, gasto manual).
-    problem: "Não saber qual anúncio trouxe a venda",
-    resource:
-      "Origem de anúncios Click-to-WhatsApp, links rastreáveis com UTM, vendas da Hotmart, Kiwify e Eduzz e conversões enviadas à Meta e ao Google Ads",
-    benefit: "Ligar o investimento em anúncio às vendas registradas.",
+    // RA1 ✅, RA2 ✅, RA3 ✅, CV4 🟢, CV5 🟢, CV6 🟢 (gasto informado manualmente).
+    id: "origem",
+    problem: "Para quando não se sabe qual anúncio trouxe a venda",
+    title: "Origem de cada lead e retorno do anúncio",
+    points: [
+      "Origem capturada automaticamente em anúncios Click-to-WhatsApp",
+      "Links rastreáveis que preservam as UTMs",
+      "Painel de atribuição por campanha",
+      "Conversões enviadas à Meta e ao Google Ads",
+      "Custo por lead e ROAS a partir do gasto informado",
+    ],
+    art: "origin",
+    shot: null,
   },
   {
-    // MR3/MR4 painéis (✅), AC4 auditoria (✅), IA2 classificação (🟢), IA1 insights (✅).
-    problem: "Pouca visibilidade sobre o desempenho do time",
-    resource: "Painéis por atendente e por setor, log de auditoria e classificação de leads por IA",
-    benefit: "Acompanhar o time com dados do próprio CRM.",
+    // Automações e fluxos (base wacrm), IA2 🟢, CV3 ✅, IA1 ✅, CV7 ✅, API pública.
+    id: "automacao",
+    problem: "Para ganhar tempo no operacional",
+    title: "Automação e inteligência no dia a dia",
+    points: [
+      "Automações por gatilho e fluxos visuais",
+      "Classificação de leads por temperatura com IA",
+      "Vendas identificadas pela IA e confirmadas por uma pessoa",
+      "Insights para o gestor",
+      "Webhooks de saída e API REST para integrações próprias",
+    ],
+    art: "automation",
+    shot: null,
+    dark: true,
   },
 ];
 
@@ -168,8 +230,8 @@ export const faq: { q: string; a: string }[] = [
   },
 ];
 
-/** PENDING_BUSINESS_CONFIGURATION: telas reais do CRM (webp otimizado + alt). Vazio = seção oculta. */
-export const screenshots: { src: string; alt: string; width: number; height: number }[] = [];
+/** PENDING_BUSINESS_CONFIGURATION: tela real principal do CRM (abaixo da abertura). null = sem imagem. */
+export const heroShot: Shot | null = null;
 
 /** PENDING_BUSINESS_CONFIGURATION: depoimentos AUTORIZADOS. Vazio = seção oculta (nada inventado). */
 export const testimonials: { quote: string; author: string; company: string }[] = [];

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as cfg from "./config";
-import { renderDemo, renderFooterLogin, renderHero, renderNav, renderPlans, renderTestimonials, primaryCta } from "./render";
+import { art, renderDeepDives, renderFooterLogin, renderHero, renderNav, renderPillars, renderPlans, renderTestimonials, primaryCta } from "./render";
 
 const ready: cfg.Plan = {
   id: "pro", name: "Pro", priceCents: 19900, currency: "BRL", period: "mês",
@@ -29,10 +29,30 @@ describe("nada comercial inventado", () => {
     expect(primaryCta(withPlans([ready]))).toEqual({ label: "Conhecer os planos", href: "#planos" });
   });
 
-  it("sem telas reais e sem depoimentos, as seções não existem", () => {
-    expect(renderDemo()).toBe("");
+  it("sem tela real: nada de imagem de produto; desenhos esquemáticos só com formas (sem texto)", () => {
     expect(renderTestimonials()).toBe("");
     expect(renderHero()).not.toContain("<img");
+    expect(renderDeepDives()).not.toContain("<img");
+    for (const k of ["inbox", "funnel", "origin", "automation"] as const) {
+      const svg = art(k);
+      expect(svg).toContain('aria-hidden="true"');
+      expect(svg).not.toMatch(/<text|R\$|\d{2}:\d{2}/);
+    }
+  });
+
+  it("tela real configurada substitui o desenho", () => {
+    const shot = { src: "inbox.webp", alt: "Caixa de entrada do CRM", width: 1200, height: 800 };
+    const html = renderDeepDives({ ...cfg, deepDives: [{ ...cfg.deepDives[0], shot }] });
+    expect(html).toContain('src="inbox.webp"');
+    expect(html).not.toContain('class="art"');
+  });
+
+  it("seções de aprofundamento só listam recursos da config (com o problema que resolvem)", () => {
+    const html = renderDeepDives() + renderPillars();
+    for (const d of cfg.deepDives) {
+      expect(html).toContain(d.problem);
+      for (const p of d.points) expect(html).toContain(p);
+    }
   });
 
   it("acesso de clientes é separado e, enquanto pendente, não é link navegável", () => {

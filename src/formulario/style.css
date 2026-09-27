@@ -674,3 +674,57 @@ select[aria-invalid="true"]:focus {
     transition: none !important;
   }
 }
+
+/* ---------- Página "Aqui não, curioso" ---------- */
+.curious {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem max(1.25rem, env(safe-area-inset-left));
+  text-align: center;
+  background: var(--rco-blue);
+  color: #fff;
+}
+
+.curious__logo {
+  width: 56px;
+  height: auto;
+  padding: 10px;
+  border-radius: 14px;
+  background: #fff;
+  box-sizing: content-box;
+}
+
+.curious__title {
+  margin: 1rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 9vw, 4rem);
+  line-height: 1.05;
+}
+
+.curious__text {
+  margin: 0;
+  max-width: 26rem;
+  font-size: 1.0625rem;
+  color: #fff;
+}
+
+.curious__cta {
+  margin-top: 1rem;
+  background: #fff;
+  color: var(--rco-blue-hover);
+  text-decoration: none;
+}
+
+.curious__cta:hover {
+  background: var(--rco-blue-tint);
+}
+
+.curious__cta:focus-visible {
+  outline-color: #fff;
+}

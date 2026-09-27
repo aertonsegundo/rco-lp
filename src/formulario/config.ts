@@ -61,3 +61,19 @@ export const REVENUE_RANGES: Option[] = [
 
 export const labelOf = (options: Option[], value: string): string =>
   options.find((o) => o.value === value)?.label ?? value;
+
+/**
+ * Nomes "de curioso": quem se identifica assim vai para a página "Aqui não, curioso" e nada é salvo.
+ * Comparação por palavra inteira, sem acento. Além desta lista: test/teste/testando e variações,
+ * uma letra repetida (aaaa), palavra sem vogal com 4+ letras (sdfg) e nome com número.
+ * A RCO pode acrescentar termos aqui.
+ */
+export const SUSPECT_NAMES: readonly string[] = [
+  "fulano", "fulana", "ciclano", "ciclana", "sicrano", "sicrana", "beltrano", "beltrana",
+  "asdf", "asdfg", "asdfgh", "qwerty", "qwert", "abc", "abcd", "xxx", "xpto",
+  "lorem", "ipsum", "fake", "bot", "anonimo", "anonima", "ninguem", "curioso", "curiosa",
+  "nada", "nome", "sobrenome", "exemplo",
+];
+
+/** Página para onde vai quem se identifica como curioso (relativa a /formulario/). */
+export const CURIOUS_PAGE = "./curioso/";

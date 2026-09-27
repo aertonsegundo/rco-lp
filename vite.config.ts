@@ -53,6 +53,11 @@ export default defineConfig({
   plugins: [devLeadApi()],
   build: {
     target: "es2019",
-    rollupOptions: { input: { formulario: resolve(import.meta.dirname, "formulario/index.html") } },
+    rollupOptions: {
+      input: {
+        formulario: resolve(import.meta.dirname, "formulario/index.html"),
+        curioso: resolve(import.meta.dirname, "formulario/curioso/index.html"),
+      },
+    },
   },
 });

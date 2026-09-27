@@ -14,6 +14,8 @@ const PII = ["Maria", "Silva", "99876", "5562998765432", "servicos", "ate_10k", 
 
 type Sender = ReturnType<typeof vi.fn<(p: LeadPayload) => Promise<SendResult>>>;
 
+let redirected: string[] = [];
+
 function setup(send: Sender, href = ENTRY) {
   document.body.innerHTML = BODY;
   const tracker = createTracker(window, sessionStorage);
@@ -25,6 +27,7 @@ function setup(send: Sender, href = ENTRY) {
     attribution: captureAttribution(href, "https://bio.rcohub.com/", sessionStorage),
     draft: loadDraft(sessionStorage),
     send,
+    redirect: (url) => redirected.push(url),
   });
   return ctl;
 }
@@ -67,6 +70,7 @@ const saved = (): Sender => vi.fn(async () => ({ kind: "saved", leadId: "L1", du
 beforeEach(() => {
   sessionStorage.clear();
   window.dataLayer = [];
+  redirected = [];
 });
 
 describe("P02 — navegação", () => {
@@ -369,5 +373,54 @@ describe("P02 — tracking", () => {
     type("#full_name", "M");
     type("#full_name", "Ma");
     expect(named("form_start")).toHaveLength(1);
+  });
+});
+
+describe("P02 — nome de curioso", () => {
+  it.each(["Teste", "Fulano de Tal", "aaaaa", "asdf"])("'%s' vai para a página do curioso e nada é salvo", async (nome) => {
+    const send = saved();
+    setup(send);
+    type("#full_name", nome);
+    type("#whatsapp", "62998765432");
+    submitStep();
+    expect(redirected).toEqual(["./curioso/"]);
+    expect(visibleStep()).toBe(1);
+    expect(send).not.toHaveBeenCalled();
+    expect(sessionStorage.getItem("rco_p02_rascunho")).toBeNull();
+    expect(named("form_error").at(-1)).toEqual({
+      event: "form_error",
+      page_type: "performance_form",
+      form_name: "performance",
+      error_type: "suspect_name",
+    });
+    expect(JSON.stringify(events())).not.toContain(nome);
+    expect(named("form_step")).toHaveLength(0);
+  });
+
+  it("nome real segue normal", () => {
+    setup(saved());
+    type("#full_name", "Celeste Souza");
+    type("#whatsapp", "62998765432");
+    submitStep();
+    expect(redirected).toEqual([]);
+    expect(visibleStep()).toBe(2);
+  });
+
+  it("nome trocado para curioso depois (rascunho editado) é barrado no envio final", async () => {
+    const send = saved();
+    sessionStorage.setItem(
+      "rco_p02_rascunho",
+      JSON.stringify({
+        submissionId: crypto.randomUUID(),
+        step: 4,
+        data: { full_name: "Fulano", whatsapp: "(62) 99876-5432", whatsapp_confirmed: true, niche: "servicos", niche_other: "", revenue_range: "ate_10k" },
+      }),
+    );
+    setup(send);
+    submitStep();
+    await flush();
+    expect(redirected).toEqual(["./curioso/"]);
+    expect(send).not.toHaveBeenCalled();
+    expect(named("generate_lead")).toHaveLength(0);
   });
 });

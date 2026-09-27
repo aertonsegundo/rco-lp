@@ -16,12 +16,15 @@ import {
   type Field,
   type FieldError,
 } from "../lib/validation";
+import { isSuspectName } from "../lib/suspect-name";
 import { formatWhatsapp, normalizeWhatsapp } from "../lib/whatsapp";
 import {
+  CURIOUS_PAGE,
   LANDING_PAGE_VERSION,
   NICHES,
   NICHE_OTHER,
   REVENUE_RANGES,
+  SUSPECT_NAMES,
   WHATSAPP_CONFIRMATION_MODE,
   labelOf,
   type WhatsappConfirmationMode,
@@ -38,6 +41,8 @@ export interface FormDeps {
   attribution: Attribution;
   draft: Draft;
   send: (payload: LeadPayload) => Promise<SendResult>;
+  /** Navegação para a página "Aqui não, curioso" (injetável para teste). */
+  redirect?: (url: string) => void;
 }
 
 /** Status gravado com o lead para cada modalidade de confirmação. */
@@ -208,9 +213,19 @@ export function mountForm(deps: FormDeps) {
     }
   }
 
+  /** Nome de curioso (Teste, Fulano, aaaa…): nada é salvo, rascunho apagado, vai para a página própria. */
+  function blockCurious(): boolean {
+    if (!isSuspectName(draft.data.full_name, SUSPECT_NAMES)) return false;
+    tracker.formError("suspect_name");
+    clearDraft(storage);
+    (deps.redirect ?? ((url: string) => window.location.assign(url)))(CURIOUS_PAGE);
+    return true;
+  }
+
   function next() {
     const errors = validateStep(draft.step, draft.data);
     if (errors.length) return showErrors(errors);
+    if (draft.step === 1 && blockCurious()) return;
     tracker.formStep(draft.step as StepNumber);
     showStep(draft.step + 1);
   }
@@ -273,6 +288,7 @@ export function mountForm(deps: FormDeps) {
       showStep(invalidStep);
       return showErrors(validateStep(invalidStep, draft.data));
     }
+    if (blockCurious()) return;
 
     tracker.formStep(4);
     submitError.hidden = true;

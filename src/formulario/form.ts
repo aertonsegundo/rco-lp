@@ -180,6 +180,10 @@ export function mountForm(deps: FormDeps) {
   function showStep(step: number, focus = true) {
     draft.step = step;
     saveDraft(storage, draft);
+    form.dataset.currentStep = String(step); // só visual: o CSS pinta os rótulos do progresso
+    // Só visual: primeiro nome na frase de conversa das etapas ("Obrigado, Maria.").
+    const firstName = cleanName(draft.data.full_name).split(" ")[0] ?? "";
+    for (const el of doc.querySelectorAll<HTMLElement>("[data-first-name]")) el.textContent = firstName;
     for (const s of doc.querySelectorAll<HTMLElement>("[data-step]")) {
       s.hidden = Number(s.dataset.step) !== step;
     }

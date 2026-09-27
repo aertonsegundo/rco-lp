@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0D67F0" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="color-scheme" content="light" />
     <!-- Página de captação: não indexar. -->
     <meta name="robots" content="noindex" />
@@ -11,115 +11,147 @@
     <meta name="description" content="Formulário de contato da RCO para o serviço de Performance." />
     <link rel="canonical" href="https://lp.rcohub.com/formulario/" />
     <link rel="icon" type="image/webp" href="../favicon.webp" />
+    <!-- Bowlby One (título do painel) + Inter (formulário). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Inter:wght@400;500;600;700&display=swap" />
   </head>
   <body>
-    <main class="page">
-      <!-- PENDENTE: copy oficial de todo o texto desta página. -->
-      <header class="brand">
-        <!-- PENDENTE: logo completo (símbolo + nome) quando a RCO enviar o arquivo. -->
-        <img class="brand__logo" src="../rco-simbolo.webp" alt="RCO" width="56" height="54" />
-        <h1 class="brand__title">Conte sobre sua empresa</h1>
-        <p class="brand__intro">Responda em 4 etapas curtas para o time comercial da RCO conhecer sua empresa.</p>
-      </header>
+    <!-- PENDENTE: copy oficial de todo o texto desta página. -->
+    <main class="split">
+      <!-- Painel da marca: visível no desktop; no celular fica só para leitores de tela (o formulário vem primeiro). -->
+      <aside class="panel" aria-labelledby="panel-title">
+        <div class="panel__inner">
+          <!-- PENDENTE: logo completo (símbolo + nome) quando a RCO enviar o arquivo. -->
+          <span class="panel__logo"><img src="../rco-simbolo.webp" alt="RCO" width="34" height="33" /></span>
+          <h1 id="panel-title" class="panel__title">Vamos conhecer sua empresa</h1>
+          <p class="panel__lead">Com essas informações, o time comercial da RCO prepara a conversa com você.</p>
+          <p class="panel__fine">São 4 etapas curtas, e você confere tudo antes de enviar.</p>
+        </div>
+      </aside>
 
-      <section class="about" aria-label="Sobre este formulário">
-        <p><strong>Por que pedimos esses dados:</strong> para o time comercial entender o momento da sua empresa antes de conversar com você.</p>
-        <p><strong>Depois do envio:</strong> o time comercial da RCO entra em contato pelo WhatsApp que você informar.</p>
-      </section>
+      <div class="side">
+        <header class="side__top">
+          <img class="side__logo" src="../rco-simbolo.webp" alt="RCO" width="36" height="34" />
+        </header>
 
-      <form id="lead-form" class="card" novalidate>
-        <div class="progress">
-          <p id="progress-text" class="progress__text">Etapa 1 de 4</p>
-          <div class="progress__bar" aria-hidden="true"><span id="progress-fill"></span></div>
+        <div class="side__body">
+          <form id="lead-form" class="flow" novalidate>
+            <div class="progress">
+              <p id="progress-text" class="progress__text">Etapa 1 de 4</p>
+              <div class="progress__bar" aria-hidden="true"><span id="progress-fill"></span></div>
+            </div>
+
+            <!-- Armadilha anti-spam: invisível para pessoas, fora do Tab e dos leitores de tela. -->
+            <div class="hp" aria-hidden="true">
+              <label for="website">Não preencha este campo</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <section data-step="1" aria-labelledby="s1-title">
+              <p class="step__eyebrow">Olá! Vamos começar.</p>
+              <h2 id="s1-title" class="step__title" tabindex="-1">Como podemos falar com você?</h2>
+              <div class="field">
+                <label for="full_name">Nome completo</label>
+                <input id="full_name" name="full_name" type="text" autocomplete="name" autocapitalize="words" maxlength="120" placeholder="Digite seu nome e sobrenome" required aria-describedby="full_name-error" />
+                <p id="full_name-error" class="field__error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="whatsapp">WhatsApp com DDD</label>
+                <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(00) 00000-0000" maxlength="16" required aria-describedby="whatsapp-hint whatsapp-error" />
+                <p id="whatsapp-hint" class="field__hint">É por esse número que o time comercial vai falar com você.</p>
+                <p id="whatsapp-error" class="field__error" hidden></p>
+              </div>
+              <div class="actions">
+                <button type="submit" class="btn btn--primary">Continuar<svg class="btn__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+            </section>
+
+            <section data-step="2" aria-labelledby="s2-title" hidden>
+              <p class="step__eyebrow">Obrigado, <span data-first-name></span>.</p>
+              <h2 id="s2-title" class="step__title" tabindex="-1">Esse é o seu WhatsApp?</h2>
+              <div class="confirm">
+                <p class="confirm__lead">Você informou</p>
+                <p class="confirm__number" id="confirm-number"></p>
+              </div>
+              <div class="field field--check">
+                <input id="whatsapp_confirmed" name="whatsapp_confirmed" type="checkbox" aria-describedby="whatsapp_confirmed-error" />
+                <label for="whatsapp_confirmed">Conferi e este é o meu número de WhatsApp.</label>
+              </div>
+              <p id="whatsapp_confirmed-error" class="field__error" hidden></p>
+              <div class="actions">
+                <button type="button" class="btn btn--back" data-back>Corrigir número</button>
+                <button type="submit" class="btn btn--primary">Continuar<svg class="btn__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+            </section>
+
+            <section data-step="3" aria-labelledby="s3-title" hidden>
+              <p class="step__eyebrow">Agora, sobre a sua empresa</p>
+              <h2 id="s3-title" class="step__title" tabindex="-1">Qual o segmento e o faturamento?</h2>
+              <div class="field">
+                <label for="niche">Segmento da empresa</label>
+                <select id="niche" name="niche" required aria-describedby="niche-error">
+                  <option value="">Selecionar segmento</option>
+                </select>
+                <p id="niche-error" class="field__error" hidden></p>
+              </div>
+              <div class="field" id="niche_other-field" hidden>
+                <label for="niche_other">Qual segmento?</label>
+                <input id="niche_other" name="niche_other" type="text" maxlength="80" autocomplete="off" aria-describedby="niche_other-error" />
+                <p id="niche_other-error" class="field__error" hidden></p>
+              </div>
+              <fieldset class="field" id="revenue_range" aria-describedby="revenue_range-error">
+                <legend>Faturamento mensal aproximado</legend>
+                <div class="radios" id="revenue-options"></div>
+                <p id="revenue_range-error" class="field__error" hidden></p>
+              </fieldset>
+              <div class="actions">
+                <button type="button" class="btn btn--back" data-back>Voltar</button>
+                <button type="submit" class="btn btn--primary">Revisar<svg class="btn__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+            </section>
+
+            <section data-step="4" aria-labelledby="s4-title" hidden>
+              <p class="step__eyebrow">Última etapa, <span data-first-name></span></p>
+              <h2 id="s4-title" class="step__title" tabindex="-1">Está tudo certo?</h2>
+              <dl class="review">
+                <div class="review__row"><dt>Nome</dt><dd data-review="full_name"></dd><button type="button" class="link" data-edit="1" aria-label="Editar nome">Editar</button></div>
+                <div class="review__row"><dt>WhatsApp</dt><dd data-review="whatsapp"></dd><button type="button" class="link" data-edit="1" aria-label="Editar WhatsApp">Editar</button></div>
+                <div class="review__row"><dt>Segmento</dt><dd data-review="niche"></dd><button type="button" class="link" data-edit="3" aria-label="Editar segmento">Editar</button></div>
+                <div class="review__row"><dt>Faturamento</dt><dd data-review="revenue_range"></dd><button type="button" class="link" data-edit="3" aria-label="Editar faturamento">Editar</button></div>
+              </dl>
+              <p id="submit-error" class="alert" role="alert" hidden></p>
+              <p id="submit-status" class="status" role="status"></p>
+              <div class="actions">
+                <button type="button" class="btn btn--back" data-back>Voltar</button>
+                <button type="submit" class="btn btn--primary" id="submit-button">Enviar</button>
+              </div>
+            </section>
+          </form>
+
+          <section id="success" class="success" aria-labelledby="success-title" hidden>
+            <span class="success__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M6 12.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h2 id="success-title" tabindex="-1">Recebemos seus dados</h2>
+            <p>Obrigado. O time comercial da RCO vai falar com você pelo WhatsApp informado.</p>
+          </section>
+
+          <!-- Cartão de apoio (no lugar do depoimento da referência: nada de prova inventada). -->
+          <ul class="about" aria-label="Sobre este formulário">
+            <li class="about__item">
+              <strong>Por que pedimos esses dados</strong>
+              <span>Para entender o momento da sua empresa antes de conversar com você.</span>
+            </li>
+            <li class="about__item">
+              <strong>Depois do envio</strong>
+              <span>O time comercial da RCO fala com você pelo WhatsApp que você informar.</span>
+            </li>
+          </ul>
+
+          <noscript><p class="alert">Para enviar o formulário, ative o JavaScript do navegador.</p></noscript>
         </div>
 
-        <!-- Armadilha anti-spam: invisível para pessoas, fora do Tab e dos leitores de tela. -->
-        <div class="hp" aria-hidden="true">
-          <label for="website">Não preencha este campo</label>
-          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-        </div>
-
-        <section data-step="1" aria-labelledby="s1-title">
-          <h2 id="s1-title" class="step__title" tabindex="-1">Seus dados de contato</h2>
-          <div class="field">
-            <label for="full_name">Nome completo</label>
-            <input id="full_name" name="full_name" type="text" autocomplete="name" autocapitalize="words" maxlength="120" required aria-describedby="full_name-error" />
-            <p id="full_name-error" class="field__error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="whatsapp">WhatsApp com DDD</label>
-            <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(00) 00000-0000" maxlength="16" required aria-describedby="whatsapp-hint whatsapp-error" />
-            <p id="whatsapp-hint" class="field__hint">É por esse número que o time comercial vai falar com você.</p>
-            <p id="whatsapp-error" class="field__error" hidden></p>
-          </div>
-          <div class="actions">
-            <button type="submit" class="btn btn--primary">Continuar</button>
-          </div>
-        </section>
-
-        <section data-step="2" aria-labelledby="s2-title" hidden>
-          <h2 id="s2-title" class="step__title" tabindex="-1">Confira seu WhatsApp</h2>
-          <p class="confirm__lead">Você informou:</p>
-          <p class="confirm__number" id="confirm-number"></p>
-          <div class="field field--check">
-            <input id="whatsapp_confirmed" name="whatsapp_confirmed" type="checkbox" aria-describedby="whatsapp_confirmed-error" />
-            <label for="whatsapp_confirmed">Conferi e este é o meu número de WhatsApp.</label>
-          </div>
-          <p id="whatsapp_confirmed-error" class="field__error" hidden></p>
-          <div class="actions">
-            <button type="submit" class="btn btn--primary">Continuar</button>
-            <button type="button" class="btn btn--ghost" data-back>Voltar e corrigir o número</button>
-          </div>
-        </section>
-
-        <section data-step="3" aria-labelledby="s3-title" hidden>
-          <h2 id="s3-title" class="step__title" tabindex="-1">Sobre sua empresa</h2>
-          <div class="field">
-            <label for="niche">Segmento da empresa</label>
-            <select id="niche" name="niche" required aria-describedby="niche-error">
-              <option value="">Selecione</option>
-            </select>
-            <p id="niche-error" class="field__error" hidden></p>
-          </div>
-          <div class="field" id="niche_other-field" hidden>
-            <label for="niche_other">Qual segmento?</label>
-            <input id="niche_other" name="niche_other" type="text" maxlength="80" autocomplete="off" aria-describedby="niche_other-error" />
-            <p id="niche_other-error" class="field__error" hidden></p>
-          </div>
-          <fieldset class="field" id="revenue_range" aria-describedby="revenue_range-error">
-            <legend>Faturamento mensal aproximado</legend>
-            <div class="radios" id="revenue-options"></div>
-            <p id="revenue_range-error" class="field__error" hidden></p>
-          </fieldset>
-          <div class="actions">
-            <button type="submit" class="btn btn--primary">Revisar</button>
-            <button type="button" class="btn btn--ghost" data-back>Voltar</button>
-          </div>
-        </section>
-
-        <section data-step="4" aria-labelledby="s4-title" hidden>
-          <h2 id="s4-title" class="step__title" tabindex="-1">Revise antes de enviar</h2>
-          <dl class="review">
-            <div class="review__row"><dt>Nome</dt><dd data-review="full_name"></dd><button type="button" class="link" data-edit="1" aria-label="Editar nome">Editar</button></div>
-            <div class="review__row"><dt>WhatsApp</dt><dd data-review="whatsapp"></dd><button type="button" class="link" data-edit="1" aria-label="Editar WhatsApp">Editar</button></div>
-            <div class="review__row"><dt>Segmento</dt><dd data-review="niche"></dd><button type="button" class="link" data-edit="3" aria-label="Editar segmento">Editar</button></div>
-            <div class="review__row"><dt>Faturamento</dt><dd data-review="revenue_range"></dd><button type="button" class="link" data-edit="3" aria-label="Editar faturamento">Editar</button></div>
-          </dl>
-          <p id="submit-error" class="alert" role="alert" hidden></p>
-          <p id="submit-status" class="status" role="status"></p>
-          <div class="actions">
-            <button type="submit" class="btn btn--primary" id="submit-button">Enviar</button>
-            <button type="button" class="btn btn--ghost" data-back>Voltar</button>
-          </div>
-        </section>
-      </form>
-
-      <section id="success" class="card success" aria-labelledby="success-title" hidden>
-        <h2 id="success-title" tabindex="-1">Recebemos seus dados</h2>
-        <p>Obrigado. O time comercial da RCO vai falar com você pelo WhatsApp informado.</p>
-      </section>
-
-      <noscript><p class="alert">Para enviar o formulário, ative o JavaScript do navegador.</p></noscript>
+        <footer class="side__foot">© RCO</footer>
+      </div>
     </main>
     <script type="module" src="/src/formulario/main.ts"></script>
   </body>

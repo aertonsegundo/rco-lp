@@ -1,0 +1,39 @@
+import { describe, expect, it, vi } from "vitest";
+import { sendLead, type LeadPayload } from "./api";
+
+const cfg = { url: "https://sb.example", anonKey: "anon", rpc: "capturar_lead_performance_rco", timeoutMs: 50 };
+const payload = { submission_id: "x" } as LeadPayload;
+const reply = (status: number, body: unknown) =>
+  vi.fn(async () => new Response(JSON.stringify(body), { status })) as unknown as typeof fetch;
+
+describe("sendLead", () => {
+  it("saved só com ok:true e lead_id vindos do servidor", async () => {
+    const f = reply(200, { ok: true, lead_id: "L1", duplicate: false });
+    expect(await sendLead(payload, cfg, f)).toEqual({ kind: "saved", leadId: "L1", duplicate: false });
+    const [url, init] = (f as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(url).toBe("https://sb.example/rest/v1/rpc/capturar_lead_performance_rco");
+    expect(JSON.parse(init.body)).toEqual({ payload });
+    expect(url).not.toContain("?");
+  });
+
+  it("rejeição do servidor vira rejected com o campo", async () => {
+    expect(await sendLead(payload, cfg, reply(200, { ok: false, error: "invalid_whatsapp", field: "whatsapp" }))).toEqual({
+      kind: "rejected",
+      error: "invalid_whatsapp",
+      field: "whatsapp",
+    });
+  });
+
+  it("nada de falso sucesso: HTTP de erro, corpo estranho, rede, timeout e config ausente", async () => {
+    expect(await sendLead(payload, cfg, reply(503, {}))).toEqual({ kind: "failed", reason: "http" });
+    expect(await sendLead(payload, cfg, reply(200, { ok: true }))).toEqual({ kind: "failed", reason: "unexpected" });
+    const offline = vi.fn(async () => {
+      throw new TypeError("Failed to fetch");
+    }) as unknown as typeof fetch;
+    expect(await sendLead(payload, cfg, offline)).toEqual({ kind: "failed", reason: "network" });
+    const hang = ((_u: string, init: RequestInit) =>
+      new Promise((_r, reject) => init.signal!.addEventListener("abort", () => reject(new Error("abort"))))) as unknown as typeof fetch;
+    expect(await sendLead(payload, cfg, hang)).toEqual({ kind: "failed", reason: "timeout" });
+    expect(await sendLead(payload, { ...cfg, url: "" }, reply(200, {}))).toEqual({ kind: "failed", reason: "config" });
+  });
+});

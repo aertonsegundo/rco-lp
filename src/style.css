@@ -61,7 +61,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 /* ---------- Abertura ---------- */
 .hero { padding: 3.5rem 0 3rem; background: radial-gradient(90% 70% at 50% 0%, #eaf3ff 0%, rgb(255 255 255 / 0) 70%); }
 .hero__inner { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.pill-label { margin: 0 0 1.25rem; padding: 0.3125rem 1rem; border: 1.5px solid var(--rco-blue); border-radius: 999px; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rco-blue-hover); background: #fff; }
 .hero__title { margin: 0; font-size: clamp(2.125rem, 7vw, 3.75rem); line-height: 1.08; font-weight: 700; letter-spacing: -0.035em; max-width: 18ch; }
 .hero__kicker { margin: 1.25rem 0 0; font-size: 1.0625rem; font-weight: 700; color: var(--ink); }
 .hero__lead { margin: 0.75rem 0 0; font-size: 1.0625rem; color: var(--ink-soft); max-width: 40rem; }

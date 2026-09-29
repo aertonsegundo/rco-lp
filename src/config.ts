@@ -75,7 +75,6 @@ export const copy = {
   title: "CRM RCO | Atendimento e vendas pelo WhatsApp",
   description:
     "CRM da RCO para organizar atendimento, funil de vendas e origem dos leads no WhatsApp, com integrações de venda e conversões.",
-  heroEyebrow: "CRM RCO",
   heroTitle: "Atendimento e vendas pelo WhatsApp num só lugar",
   heroKicker: "Para empresas que atendem e vendem pelo WhatsApp",
   heroLead:

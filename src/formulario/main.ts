@@ -1,5 +1,5 @@
 import "./style.css";
-import { sendLead } from "../lib/api";
+import { savePartial, sendLead } from "../lib/api";
 import { captureAttribution } from "../lib/attribution";
 import { loadDraft } from "../lib/draft";
 import { createTracker } from "../lib/tracking";
@@ -26,4 +26,5 @@ mountForm({
   attribution: captureAttribution(window.location.href, document.referrer, storage),
   draft: loadDraft(storage),
   send: (payload) => sendLead(payload, api),
+  savePartial: (payload) => savePartial(payload, api),
 });

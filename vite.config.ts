@@ -8,13 +8,15 @@ import { defineConfig, type Plugin } from "vite";
  *   POST /__dev/api/rest/v1/rpc/capturar_lead_performance_rco  → a função de verdade
  *   POST /__dev/fail?mode=http|timeout                           → próxima chamada falha
  *   GET  /__dev/leads                                            → linhas salvas
+ *   POST /__dev/api/rest/v1/rpc/salvar_parcial_performance_rco   → contato parcial (migration 004)
+ *   GET  /__dev/parciais                                         → parciais salvos
  */
 function devLeadApi(): Plugin {
   return {
     name: "dev-lead-api",
     apply: "serve",
     async configureServer(server) {
-      const { createTestDb, rpcAsAnon } = await server.ssrLoadModule("/dev/test-db.ts");
+      const { createTestDb, rpcAsAnon, callAsAnon } = await server.ssrLoadModule("/dev/test-db.ts");
       const db = await createTestDb();
       let failNext: string | null = null;
 
@@ -32,6 +34,15 @@ function devLeadApi(): Plugin {
         if (url.pathname === "/__dev/leads") {
           const rows = await db.query("select * from leads_performance_rco order by created_at");
           return send(200, rows.rows);
+        }
+        if (url.pathname === "/__dev/parciais") {
+          const rows = await db.query("select * from leads_parciais_performance_rco order by created_at");
+          return send(200, rows.rows);
+        }
+        if (url.pathname === "/__dev/api/rest/v1/rpc/salvar_parcial_performance_rco" && req.method === "POST") {
+          let raw = "";
+          for await (const chunk of req) raw += chunk;
+          return send(200, await callAsAnon(db, "salvar_parcial_performance_rco", JSON.parse(raw).payload));
         }
         if (url.pathname === "/__dev/api/rest/v1/rpc/capturar_lead_performance_rco" && req.method === "POST") {
           let raw = "";

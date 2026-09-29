@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 
-const MIGRATIONS = ["001_leads_performance_rco.sql", "002_despacho_crm_rco.sql"].map((f) =>
+const MIGRATIONS = ["001_leads_performance_rco.sql", "002_despacho_crm_rco.sql", "003_formulario_uma_pergunta_por_tela_rco.sql", "004_contatos_parciais_rco.sql"].map((f) =>
   resolve(process.cwd(), "supabase/migrations", f),
 );
 
@@ -30,6 +30,17 @@ export async function rpcAsAnon(db: PGlite, payload: unknown): Promise<Record<st
       "select public.capturar_lead_performance_rco($1::jsonb) as r",
       [JSON.stringify(payload)],
     );
+    return res.rows[0].r;
+  });
+}
+
+/** Qualquer RPC pública, como o site chamaria (papel anon). */
+export async function callAsAnon(db: PGlite, fn: string, payload: unknown): Promise<Record<string, unknown>> {
+  return db.transaction(async (tx) => {
+    await tx.exec("set local role anon");
+    const res = await tx.query<{ r: Record<string, unknown> }>(`select public.${fn}($1::jsonb) as r`, [
+      JSON.stringify(payload),
+    ]);
     return res.rows[0].r;
   });
 }

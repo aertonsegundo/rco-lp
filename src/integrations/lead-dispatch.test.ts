@@ -8,7 +8,7 @@ const lead: LeadRecord = {
   whatsapp_confirmation_status: "confirmado_visualmente",
   niche: "outro",
   niche_other: "Pet shop",
-  revenue_range: "10k_50k",
+  revenue_range: "10k_30k",
   source_page: "https://bio.rcohub.com/",
   conversion_page: "https://lp.rcohub.com/formulario/",
   landing_page_version: "p02-formulario-v1",
@@ -43,7 +43,7 @@ describe("integrações (contratos)", () => {
       phone: "5562998765432",
       service_of_interest: "performance",
       niche: "Outro: Pet shop",
-      revenue_range: "De R$ 10 mil a R$ 50 mil",
+      revenue_range: "De R$ 10.000 até R$ 30.000",
       origin: { utm_source: "instagram", fbclid: "ABC", source_page: "https://bio.rcohub.com/" },
     });
   });

@@ -12,6 +12,15 @@ export interface LeadPayload extends Attribution {
   niche: string;
   niche_other: string | null;
   revenue_range: string;
+  email: string;
+  /** "@perfil", já normalizado. */
+  instagram: string;
+  employees: string;
+  /** Opcional: sócio ou convidado para a consultoria (texto livre). */
+  partner: string | null;
+  sales_challenge: string;
+  urgency: string;
+  ads_experience: string;
   landing_page_version: string;
   /** Armadilha anti-spam (campo escondido). Pessoa real deixa vazio. */
   website: string;
@@ -71,4 +80,52 @@ export async function sendLead(
     return { kind: "rejected", error: r.error, field: typeof r.field === "string" ? r.field : undefined };
   }
   return { kind: "failed", reason: "unexpected" };
+}
+
+/** Respostas já dadas, a partir do WhatsApp (ver migration 004). Nunca vai para analytics. */
+export interface PartialPayload extends Attribution {
+  submission_id: string;
+  whatsapp: string;
+  full_name: string | null;
+  email: string | null;
+  instagram: string | null;
+  employees: string | null;
+  niche: string | null;
+  niche_other: string | null;
+  partner: string | null;
+  sales_challenge: string | null;
+  urgency: string | null;
+  ads_experience: string | null;
+  revenue_range: string | null;
+  /** Id da última tela concluída. */
+  last_step: string;
+  landing_page_version: string;
+  website: string;
+}
+
+/**
+ * Salva o contato parcial (RPC salvar_parcial_performance_rco). Silencioso de propósito:
+ * não bloqueia a pessoa, não mostra erro e não repete — o que vale é o envio final.
+ * keepalive: o pedido segue mesmo se a página estiver fechando.
+ */
+export function savePartial(
+  payload: PartialPayload,
+  cfg: Pick<ApiConfig, "url" | "anonKey"> & { partialRpc: string },
+  fetchImpl: typeof fetch = (...args) => fetch(...args),
+): void {
+  if (!cfg.url || !cfg.anonKey) return;
+  try {
+    void fetchImpl(`${cfg.url}/rest/v1/rpc/${cfg.partialRpc}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: cfg.anonKey,
+        Authorization: `Bearer ${cfg.anonKey}`,
+      },
+      body: JSON.stringify({ payload }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    /* sem rede: o envio final continua sendo o que importa */
+  }
 }

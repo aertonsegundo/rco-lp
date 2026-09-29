@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { sendLead, type LeadPayload } from "./api";
+import { savePartial, sendLead, type LeadPayload, type PartialPayload } from "./api";
 
 const cfg = { url: "https://sb.example", anonKey: "anon", rpc: "capturar_lead_performance_rco", timeoutMs: 50 };
 const payload = { submission_id: "x" } as LeadPayload;
@@ -35,5 +35,26 @@ describe("sendLead", () => {
       new Promise((_r, reject) => init.signal!.addEventListener("abort", () => reject(new Error("abort"))))) as unknown as typeof fetch;
     expect(await sendLead(payload, cfg, hang)).toEqual({ kind: "failed", reason: "timeout" });
     expect(await sendLead(payload, { ...cfg, url: "" }, reply(200, {}))).toEqual({ kind: "failed", reason: "config" });
+  });
+});
+
+describe("savePartial", () => {
+  it("POST na RPC de parcial com keepalive; falha de rede não estoura", async () => {
+    const f = vi.fn(async () => {
+      throw new Error("offline");
+    }) as unknown as typeof fetch;
+    const p = { submission_id: "x", whatsapp: "5562998765432" } as PartialPayload;
+    expect(() => savePartial(p, { url: "https://sb.example", anonKey: "anon", partialRpc: "salvar_parcial_performance_rco" }, f)).not.toThrow();
+    await new Promise((r) => setTimeout(r, 0));
+    const [url, init] = (f as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(url).toBe("https://sb.example/rest/v1/rpc/salvar_parcial_performance_rco");
+    expect(init.keepalive).toBe(true);
+    expect(JSON.parse(init.body)).toEqual({ payload: p });
+  });
+
+  it("sem configuração não chama nada", () => {
+    const f = vi.fn() as unknown as typeof fetch;
+    savePartial({} as PartialPayload, { url: "", anonKey: "", partialRpc: "x" }, f);
+    expect(f).not.toHaveBeenCalled();
   });
 });

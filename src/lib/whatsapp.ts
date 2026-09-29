@@ -14,7 +14,7 @@ const DDDS = new Set([
 export function nationalDigits(input: string): string {
   let d = input.replace(/\D/g, "");
   if ((d.length === 12 || d.length === 13) && d.startsWith("55")) d = d.slice(2);
-  if (d.length === 11 && d.startsWith("0")) d = d.slice(1); // 0 + DDD + fixo
+  if ((d.length === 11 || d.length === 12) && d.startsWith("0")) d = d.slice(1); // 0 + DDD + fixo ou celular
   return d.slice(0, 11);
 }
 

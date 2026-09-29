@@ -22,19 +22,26 @@ describe("tracker", () => {
 
   it("form_step uma vez por etapa, mesmo voltando e avançando", () => {
     const t = createTracker(w, sessionStorage);
-    t.formStep(1);
-    t.formStep(2);
-    t.formStep(1);
+    t.formStep(1, "name", "s1");
+    t.formStep(2, "employees", "s1");
+    t.formStep(1, "name", "s1");
     expect(w.dataLayer).toEqual([
-      { event: "form_step", page_type: "performance_form", form_name: "performance", step: 1, step_name: "contact" },
+      { event: "form_step", page_type: "performance_form", form_name: "performance", step: 1, step_name: "name" },
       {
         event: "form_step",
         page_type: "performance_form",
         form_name: "performance",
         step: 2,
-        step_name: "whatsapp_confirmation",
+        step_name: "employees",
       },
     ]);
+  });
+
+  it("form_step não repete após reload (novo tracker); jornada nova conta de novo", () => {
+    createTracker(w, sessionStorage).formStep(1, "name", "s1");
+    createTracker(w, sessionStorage).formStep(1, "name", "s1");
+    createTracker(w, sessionStorage).formStep(1, "name", "s2");
+    expect((w.dataLayer as { event: string }[]).filter((e) => e.event === "form_step")).toHaveLength(2);
   });
 
   it("generate_lead uma vez por submission_id, inclusive após reload (novo tracker)", () => {

@@ -2,9 +2,10 @@
  * Contratos das integrações que rodam DEPOIS do lead salvo (fila em
  * leads_performance_rco: crm_status / notify_status = 'pendente').
  *
- * PENDENTE (RCO): quem consome a fila (n8n ou rotina do CRM-RCO), endpoint real do CRM,
- * provider/instância do WhatsApp, grupo interno e regra de distribuição.
- * Aqui só existem os formatos — nenhum envio é feito por este projeto.
+ * CRM: resolvido no banco — migration 002 (despachar_leads_crm_rco, pg_cron) envia para o
+ * webhook "Landing Pages" do CRM comercial no formato Respondi. buildCrmPayload abaixo é o
+ * rascunho antigo e NÃO é o que vai para o CRM.
+ * PENDENTE (RCO): aviso ao grupo fora do CRM (notify_status) e regra de distribuição.
  */
 import { NICHES, NICHE_OTHER, REVENUE_RANGES, labelOf } from "../formulario/config";
 

@@ -1,20 +1,24 @@
 /**
- * Postgres real (PGlite, WASM) com a migration da P02 aplicada.
+ * Postgres real (PGlite, WASM) com as migrations da P02 aplicadas.
  * Usado nos testes e no servidor de desenvolvimento — nunca vai para o build.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 
-const MIGRATION = resolve(process.cwd(), "supabase/migrations/001_leads_performance_rco.sql");
+const MIGRATIONS = ["001_leads_performance_rco.sql", "002_despacho_crm_rco.sql"].map((f) =>
+  resolve(process.cwd(), "supabase/migrations", f),
+);
 
 export async function createTestDb(): Promise<PGlite> {
   const db = new PGlite();
   // Papéis que o Supabase já tem de fábrica.
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin;`);
-  const sql = readFileSync(MIGRATION, "utf8");
-  await db.exec(sql);
-  await db.exec(sql); // a migration precisa aguentar rodar duas vezes
+  for (const file of MIGRATIONS) {
+    const sql = readFileSync(file, "utf8");
+    await db.exec(sql);
+    await db.exec(sql); // cada migration precisa aguentar rodar duas vezes
+  }
   return db;
 }
 

@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
+import { renderGtm, renderGtmNoscript } from "./src/gtm";
 
 /**
  * SÓ EM DESENVOLVIMENTO: simula a RPC do Supabase com um Postgres real em memória
@@ -60,8 +61,18 @@ function devLeadApi(): Plugin {
   };
 }
 
+/** GTM nas páginas do build e do dev (src/gtm.ts). */
+function gtm(): Plugin {
+  return {
+    name: "gtm",
+    transformIndexHtml(html) {
+      return html.replace("<!-- app:gtm -->", renderGtm()).replace("<!-- app:gtm-noscript -->", renderGtmNoscript());
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [devLeadApi()],
+  plugins: [devLeadApi(), gtm()],
   build: {
     target: "es2019",
     rollupOptions: {

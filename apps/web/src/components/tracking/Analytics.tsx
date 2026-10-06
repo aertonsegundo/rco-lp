@@ -32,6 +32,7 @@ export function Analytics() {
   return (
     <>
       {gtm ? (
+        // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document -- regra de Pages Router; no App Router a doc do Next manda pôr no layout raiz (script.md, "beforeInteractive")
         <Script
           id="gtm"
           strategy="beforeInteractive"

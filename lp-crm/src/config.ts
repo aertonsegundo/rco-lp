@@ -15,7 +15,7 @@ export const PENDING = "PENDING_BUSINESS_CONFIGURATION" as const;
 export const SITE_URL = "https://crm.rcohub.com/lpcrm/";
 
 /** PENDING_BUSINESS_CONFIGURATION: ID do container GTM. Vazio = GTM não carrega (o dataLayer continua). */
-export const GTM_ID = "";
+export const GTM_ID = "GTM-P9XNXV2B";
 
 export const links = {
   /**
@@ -139,7 +139,7 @@ export const deepDives: DeepDive[] = [
       "Painéis por atendente e por setor",
     ],
     art: "inbox",
-    shot: null,
+    shot: { src: "./telas/conversas.webp", alt: "Caixa de entrada do CRM com uma conversa de WhatsApp aberta e os dados do contato ao lado", width: 1440, height: 900 },
   },
   {
     // Funis kanban e broadcasts (base wacrm), CV1 ✅, CV2 ✅, EN2 🟢.
@@ -154,7 +154,7 @@ export const deepDives: DeepDive[] = [
       "Disparos com modelos de mensagem aprovados pela Meta",
     ],
     art: "funnel",
-    shot: null,
+    shot: { src: "./telas/funil.webp", alt: "Funil de vendas em kanban com negócios nas etapas Novo Lead, Tentando Contato e Follow Up", width: 1440, height: 900 },
   },
   {
     // RA1 ✅, RA2 ✅, RA3 ✅, CV4 🟢, CV5 🟢, CV6 🟢 (gasto informado manualmente).
@@ -169,7 +169,7 @@ export const deepDives: DeepDive[] = [
       "Custo por lead e ROAS a partir do gasto informado",
     ],
     art: "origin",
-    shot: null,
+    shot: { src: "./telas/metricas.webp", alt: "Painel de métricas com receita, gasto, ROAS e custo por lead de cada campanha", width: 1440, height: 900 },
   },
   {
     // Automações e fluxos (base wacrm), IA2 🟢, CV3 ✅, IA1 ✅, CV7 ✅, API pública.
@@ -230,7 +230,12 @@ export const faq: { q: string; a: string }[] = [
 ];
 
 /** PENDING_BUSINESS_CONFIGURATION: tela real principal do CRM (abaixo da abertura). null = sem imagem. */
-export const heroShot: Shot | null = null;
+export const heroShot: Shot | null = {
+  src: "./telas/desempenho.webp",
+  alt: "Painel de desempenho do CRM com conversas, novos contatos, receita, tempos de resposta e gráfico de mensagens",
+  width: 1920,
+  height: 1200,
+};
 
 /** PENDING_BUSINESS_CONFIGURATION: depoimentos AUTORIZADOS. Vazio = seção oculta (nada inventado). */
 export const testimonials: { quote: string; author: string; company: string }[] = [];

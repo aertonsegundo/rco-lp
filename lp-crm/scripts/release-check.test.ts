@@ -6,7 +6,7 @@ const blocks = (c: typeof cfg) => audit(c).filter((i) => i.level === "BLOQUEIA")
 
 describe("release-check", () => {
   it("config atual bloqueia a publicação como página de venda", () => {
-    expect(blocks(cfg)).toHaveLength(4);
+    expect(blocks(cfg)).toHaveLength(3);
   });
 
   it("com planos, pagamento, confirmação e telas reais, não bloqueia", () => {

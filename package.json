@@ -1,0 +1,28 @@
+{
+  "name": "rco-landingpages",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Landing pages da RCO Hub (P04 Performance com VSL, P05 Performance sem VSL). Leads seguem para o COMERCIAL-RCO por servidor.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @rco/web",
+    "build": "npm run build -w @rco/web",
+    "start": "npm run start -w @rco/web",
+    "lint": "npm run lint -w @rco/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "outbox": "node scripts/outbox.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^6",
+    "vitest": "^4.1.9"
+  }
+}

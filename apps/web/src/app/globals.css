@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+/* Tokens de design: TODA cor da página passa por aqui. Trocar a identidade
+   visual = editar este bloco, sem mexer em componente. */
+:root {
+  --bg: #101d41;
+  --surface: #1c305f;
+  --ink: #f4f6fb;
+  --mute: #9aa6c3;
+  --brand: #0d67f0;
+  --line: #2e4778;
+  --danger: #ff7b7b;
+  --ok: #3ddc97;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-brand: var(--brand);
+  --color-line: var(--line);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Utilitários `animate-*` do ShimmerButton (components/ui/shimmer-button.tsx):
+     o namespace `--animate-*` do Tailwind v4 gera a classe `animate-*`
+     correspondente sozinho, sem precisar de tailwind.config. `var(--speed)`
+     aqui dentro não é um token global — é a variável que o próprio botão
+     define inline (por isso só resolve no elemento certo). */
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+
+  /* Marquee (components/ui/marquee.tsx): `--duration` é a variável que o
+     próprio componente define inline (classe `[--duration:Xs]`), não um
+     token global. */
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+}
+
+/* NÃO ponha `overflow-x: hidden` aqui nem em `body`, mesmo pra travar de
+   vez algum scroll horizontal perdido por aí: testado e confirmado que
+   quebra o `position: sticky` da seção 2 (a galeria de dores) — o mesmo
+   efeito colateral já documentado pra qualquer ancestral de um elemento
+   sticky, só que ninguém esperava que valesse pro próprio `html`/`body`
+   também. Overflow horizontal indevido tem que ser resolvido na origem
+   (componente por componente), não com uma trava genérica aqui.
+
+   `overscroll-behavior-x: none` É diferente e é seguro aqui: medido com um
+   overlay de debug na própria página (não só emulador) que a diferença
+   entre a largura da tela e o `scrollWidth` real é ZERO — não existe
+   elemento vazando de verdade. O "scroll horizontal" relatado no celular
+   é o elástico nativo do Safari/iOS ao arrastar até a borda (bounce), não
+   overflow de conteúdo. `overscroll-behavior` só desliga esse elástico;
+   ao contrário de `overflow`, não cria contêiner de rolagem novo, então
+   não interfere em `position: sticky` de nada. */
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  overscroll-behavior-x: none;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Órbita de logos no hero da P05 (components/OrbitHero.tsx). Girar em
+   direções opostas com a MESMA duração (60s) é o que mantém cada logo na
+   vertical enquanto ele gira ao redor do centro: o anel gira pra um lado, o
+   próprio ícone gira pro lado oposto na mesma velocidade, e as duas rotações
+   se cancelam. `prefers-reduced-motion` já desliga isso, na regra abaixo. */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orbit-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.animate-orbit-spin {
+  animation: orbit-spin 60s linear infinite;
+}
+.animate-orbit-spin-reverse {
+  animation: orbit-spin-reverse 60s linear infinite;
+}
+
+/* Feixe animado (components/ui/animated-beam.tsx): o "cometa" que percorre
+   o caminho entre dois nós é um traço tracejado (20 unidades visíveis, 1000
+   de vão, bem maior que qualquer caminho real) cujo deslocamento anda com o
+   tempo — dá a impressão de um segmento de luz viajando pela linha inteira.
+   Em caminhos curtos (como os deste projeto) o cometa só aparece por uma
+   fração pequena do ciclo, mas é o valor original do componente vendorizado
+   (ver comentário no topo do arquivo — chegou a ser trocado por um cálculo
+   do comprimento real, sem sucesso confirmado, revertido a pedido).
+   `beam-flow` fica pronto pra uma máscara que a versão atual do componente
+   ainda não usa em nenhum elemento. */
+@keyframes beam-dash {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes beam-flow {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+
+/* ShimmerButton (components/ui/shimmer-button.tsx): o brilho é um
+   conic-gradient (`--shimmer-color`) girando sozinho atrás do botão
+   (`spin-around`), só visível no anel fino que sobra entre a borda de fora
+   e o "backdrop" interno (`--cut`) — o "spark" (`shimmer-slide`) desliza
+   esse anel de um lado a outro do container pra cobrir toda a volta do
+   botão, não só um ponto fixo. As duas animações rodam juntas, sem parar
+   (infinite), por isso o brilho está sempre em movimento na borda. */
+@keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+  }
+}
+@keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+  }
+  15%,
+  35% {
+    transform: translateZ(0) rotate(90deg);
+  }
+  65%,
+  85% {
+    transform: translateZ(0) rotate(270deg);
+  }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+  }
+}
+
+/* Marquee (components/ui/marquee.tsx): o conteúdo se repete `repeat` vezes
+   (ver o componente) e desloca o bloco por exatamente 100% do próprio
+   tamanho + o vão entre repetições (`--gap`) — quando o loop reinicia, o
+   próximo bloco repetido já está na posição de onde o primeiro começou, sem
+   emenda visível. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

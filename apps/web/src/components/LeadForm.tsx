@@ -8,7 +8,8 @@ import { formatBrPhoneInput } from "@rco/lead-core/phone";
 import { FATURAMENTOS, NICHOS } from "@/content/options";
 import type { PageConfig, PageId } from "@/content/pages";
 import { leadFormSchema } from "@/lib/lead-schema";
-import { newId, trackEvent, trackLead } from "@/lib/tracking/events";
+import { submitLead, type LeadValues } from "@/lib/lead-submit";
+import { newId, track } from "@/lib/tracking/events";
 import { readTracking } from "@/lib/tracking/utms";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { Select } from "@/components/ui/select";
@@ -40,37 +41,34 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
     defaultValues: { name: "", whatsapp: "", email: "", website: "" },
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onValid = async (values: FormValues) => {
     setStatus({ kind: "sending" });
-    trackEvent("lp_form_submit", { page });
-    try {
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...values, respondentId, page, tracking: readTracking() }),
-      });
-      if (res.ok) {
-        trackLead(page, respondentId);
-        setStatus({ kind: "done" });
-        return;
+    const outcome = await submitLead({
+      values: values as LeadValues,
+      respondentId,
+      page,
+      tracking: readTracking(),
+    });
+    if (outcome.kind === "done") {
+      setStatus({ kind: "done" });
+    } else if (outcome.kind === "field_errors") {
+      for (const [field, message] of Object.entries(outcome.errors)) {
+        if (field in values) setError(field as keyof FormValues, { message });
       }
-      if (res.status === 422) {
-        const body = (await res.json().catch(() => null)) as { errors?: Record<string, string> } | null;
-        for (const [field, message] of Object.entries(body?.errors ?? {})) {
-          if (field in values) setError(field as keyof FormValues, { message });
-        }
-        setStatus({ kind: "idle" });
-        return;
-      }
-      if (res.status === 429) {
-        setStatus({ kind: "error", message: "Muitas tentativas. Aguarde alguns minutos e tente de novo." });
-        return;
-      }
-      setStatus({ kind: "error", message: "Não foi possível enviar agora. Tente novamente em instantes." });
-    } catch {
-      setStatus({ kind: "error", message: "Sem conexão. Verifique sua internet e tente novamente." });
+      setStatus({ kind: "idle" });
+    } else {
+      setStatus({ kind: "error", message: outcome.message });
     }
-  });
+  };
+
+  // Só os NOMES dos campos com erro vão ao dataLayer, nunca o que foi digitado.
+  const onInvalid = (fieldErrors: Record<string, unknown>) =>
+    track("form_error", { page_id: page, error_type: "validation", fields: Object.keys(fieldErrors).join(",") });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    track("form_submit", { page_id: page });
+    return handleSubmit(onValid, onInvalid)(e);
+  };
 
   if (status.kind === "done") {
     return (
@@ -80,10 +78,7 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
             <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h3 className="text-xl font-bold">Recebemos seus dados!</h3>
-        <p className="mt-2 text-mute">
-          Texto de exemplo: nosso time comercial vai chamar você no WhatsApp em breve.
-        </p>
+        <h3 className="text-xl font-bold">{copy.done}</h3>
       </div>
     );
   }
@@ -98,7 +93,7 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
       onFocusCapture={() => {
         if (!started) {
           setStarted(true);
-          trackEvent("lp_form_start", { page });
+          track("form_start", { page_id: page });
         }
       }}
       className="rounded-2xl border border-line bg-surface p-6 sm:p-8"
@@ -207,7 +202,7 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
           aqui em vez de ocupar a largura inteira do formulário. */}
       <div className="mt-6 flex justify-center">
         <ShimmerButton type="submit" disabled={sending} width={260} height={52}>
-          {sending ? "Enviando…" : copy.submit}
+          {sending ? copy.sending : copy.submit}
         </ShimmerButton>
       </div>
     </form>

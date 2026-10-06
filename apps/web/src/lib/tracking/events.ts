@@ -1,29 +1,53 @@
-// Eventos de conversão. Vão para o dataLayer (GTM) e, se o Pixel estiver
-// carregado, para o Meta. Sem GTM/Pixel configurados, o dataLayer existe e
-// simplesmente ninguém escuta: nada quebra.
+import type { Tracking } from "@rco/lead-core/tracking";
+
+// ============================================================
+// dataLayer do GTM: UM helper (`track`) e UM catálogo de eventos (`EventMap`).
+// Documentação para quem configura o container: docs/gtm-eventos.md.
+//
+// REGRA: nenhum dado pessoal no dataLayer. Nada de nome, WhatsApp ou email,
+// nem em texto puro nem em hash. O catálogo abaixo é a lista fechada do que
+// pode ir: o tipo de cada evento NÃO tem campo para dado pessoal, então
+// colocar um por engano não compila (e `events.test.ts` confere em runtime).
+// Pixel do Meta e GA4 NÃO são carregados no código: vivem dentro do GTM e
+// leem estes eventos. Scroll e tempo na página também ficam por conta do GTM.
+// ============================================================
 
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
-    fbq?: (...args: unknown[]) => void;
   }
 }
 
-export function gtmPush(event: string, params: Record<string, unknown> = {}): void {
+export type FormErrorType = "validation" | "server" | "network" | "rate_limit";
+
+/** Percentuais de progresso do vídeo que geram evento. */
+export const VIDEO_MILESTONES = [25, 50, 75, 100] as const;
+export type VideoMilestone = (typeof VIDEO_MILESTONES)[number];
+
+/** Catálogo fechado de eventos e seus parâmetros. */
+export interface EventMap {
+  /** Entrada na página (e a cada navegação client-side). Carrega as UTMs/click ids da sessão. */
+  page_view: { page_id: string; page_path: string } & Tracking;
+  cta_click: { page_id: string; cta_location: string; cta_text: string };
+  /** Primeiro foco em qualquer campo do formulário (uma vez por visita). */
+  form_start: { page_id: string };
+  /** Tentativa de envio (clique no botão), válida ou não. */
+  form_submit: { page_id: string };
+  /** `fields` = só os NOMES dos campos com erro de validação, separados por vírgula. */
+  form_error: { page_id: string; error_type: FormErrorType; fields?: string };
+  /** Lead enviado com sucesso. `event_id` é o mesmo `respondent_id` enviado ao COMERCIAL (deduplicação com CAPI). */
+  generate_lead: { page_id: string; nicho: string; faturamento: string; event_id: string };
+  faq_open: { page_id: string; question: string; question_index: number };
+  video_play: { page_id: string; video_provider: string };
+  video_progress: { page_id: string; video_provider: string; percent: VideoMilestone };
+}
+
+export type EventName = keyof EventMap;
+
+export function track<E extends EventName>(event: E, params: EventMap[E]): void {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer ?? [];
   window.dataLayer.push({ event, ...params });
-}
-
-export const trackEvent = gtmPush;
-
-/**
- * Lead enviado com sucesso. `eventId` é o mesmo `respondent_id` que foi ao
- * COMERCIAL: serve para deduplicar com um evento de servidor (CAPI) no futuro.
- */
-export function trackLead(page: string, eventId: string): void {
-  gtmPush("lp_lead", { page, event_id: eventId });
-  window.fbq?.("track", "Lead", { content_name: page }, { eventID: eventId });
 }
 
 /** UUID v4. Cai para getRandomValues em navegador sem randomUUID (contexto não seguro). */

@@ -1,20 +1,33 @@
 "use client";
 
+import { track } from "@/lib/tracking/events";
 import { ShimmerButton } from "./ui/shimmer-button";
 
 /**
- * Só existe porque `OrbitHero` é um componente de servidor (sem estado, ver
- * o comentário lá) e não pode passar uma função (`onClick`) pra um
- * componente cliente como `ShimmerButton` — o Next não deixa serializar
- * função do servidor pro cliente. Este arquivo isola só o clique (rolar até
- * o formulário), recebendo do servidor só texto (`label`, `targetSelector`),
- * que é serializável.
+ * Botão que rola até o formulário e registra `cta_click`. É um componente de
+ * cliente porque o servidor não pode passar função (`onClick`) para outro
+ * componente de cliente: recebe só texto (serializável).
+ * `location` diz ONDE na página está o botão (hero, como_funciona, chamada_final).
  */
-export function HeroCta({ label, targetSelector }: { label: string; targetSelector: string }) {
+export function HeroCta({
+  label,
+  targetSelector,
+  page,
+  location,
+}: {
+  label: string;
+  targetSelector: string;
+  page: string;
+  location: string;
+}) {
   return (
     <ShimmerButton
-      width={240}
-      onClick={() => document.querySelector(targetSelector)?.scrollIntoView({ behavior: "smooth" })}
+      width={320}
+      className="max-w-full"
+      onClick={() => {
+        track("cta_click", { page_id: page, cta_location: location, cta_text: label });
+        document.querySelector(targetSelector)?.scrollIntoView({ behavior: "smooth" });
+      }}
     >
       {label}
     </ShimmerButton>

@@ -16,4 +16,6 @@ export interface VideoPlayerProps<S extends VideoSource = VideoSource> {
   source: S;
   /** Chamado na primeira reprodução (dispara o evento de rastreamento). */
   onPlay: () => void;
+  /** Chamado ao passar de 25/50/75/100% do vídeo. Só adaptadores com SDK do provedor sabem o progresso. */
+  onProgress: (percent: 25 | 50 | 75 | 100) => void;
 }

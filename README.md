@@ -13,7 +13,7 @@ Monorepo das landing pages da RCO Hub. Hoje: **P04** (Performance com VSL) e **P
 apps/web/                 Next 16 (App Router, Tailwind 4). Serve /p04 e /p05.
   src/content/pages.ts      TEXTO das páginas (tudo de exemplo) e o vídeo da P04
   src/content/options.ts    opções de Nicho e Faturamento
-  src/content/site.ts       indexação, faixa de exemplo, IDs de GTM e Pixel
+  src/content/site.ts       indexação, faixa de exemplo, ID do GTM (Pixel fica dentro do GTM)
   src/components/           formulário, seções, player de vídeo, rastreamento
   src/lib/lead-service.ts   POST /api/lead (a lógica de servidor, testável)
   src/app/globals.css       cores e tema (TODA cor passa por aqui)
@@ -44,7 +44,7 @@ um COMERCIAL de demonstração (banco descartável), nunca para produção.
 | Trocar textos, títulos, FAQ, passos | `src/content/pages.ts` |
 | Mudar as opções de Nicho / Faturamento | `src/content/options.ts` (o servidor só aceita o que está lá) |
 | Mudar cores e identidade visual | bloco `:root` em `src/app/globals.css` |
-| Ligar GTM / Pixel | `GTM_ID` e `META_PIXEL_ID` em `src/content/site.ts` |
+| GTM / eventos | `GTM_ID` em `src/content/site.ts`; eventos em `docs/gtm-eventos.md`. `META_PIXEL_ID` fica vazio (Pixel vai no GTM) |
 | Liberar indexação / tirar a faixa "Conteúdo de exemplo" | `ALLOW_INDEXING` e `SHOW_PLACEHOLDER_BADGE` em `site.ts` |
 | Colocar o vídeo real da P04 | ver abaixo |
 | Criar uma página nova (P01, P02...) | novo item em `PAGES` e em `PAGE_IDS`, uma pasta em `src/app/<p>/page.tsx` (3 linhas, copie a `p04`), e um token `COMERCIAL_LEAD_TOKEN_<ID>` |

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { Analytics } from "@/components/tracking/Analytics";
+import { Analytics, GtmNoScript } from "@/components/tracking/Analytics";
 import { UtmCapture } from "@/components/tracking/UtmCapture";
 import { ALLOW_INDEXING } from "@/content/site";
 
@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={poppins.variable}>
       <body>
+        <GtmNoScript />
         <Analytics />
         <UtmCapture />
         {children}

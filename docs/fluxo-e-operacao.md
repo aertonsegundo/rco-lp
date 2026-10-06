@@ -3,7 +3,7 @@
 ## 1. Do clique ao aviso no grupo
 
 1. **Entrada.** A visita chega com `utm_*`, `gclid`, `fbclid`. O navegador guarda na
-   **sessão** (`sessionStorage`; some ao fechar a aba). Evento `lp_view` no dataLayer.
+   **sessão** (`sessionStorage`; some ao fechar a aba). Evento `page_view` no dataLayer (ver `docs/gtm-eventos.md`).
 2. **Formulário.** Nome, WhatsApp (máscara `(11) 99999-8888`), Nicho, Faturamento e
    consentimento. Validação com o mesmo schema do servidor (`lead-core`). Um campo escondido
    (honeypot) pega robô. Cada tentativa de envio tem um `respondentId` (UUID) gerado no
@@ -19,7 +19,7 @@
    grava os campos personalizados (Página de origem, Nicho, Faturamento, UTMs, gclid, fbclid);
    cria o negócio na primeira etapa do funil da integração; avisa o grupo comercial pelo
    número por QR "Só disparos", **sem UTM, gclid e fbclid**. Idempotente por `respondent_id`.
-6. **Conversão.** Na tela de sucesso: `lp_lead` no dataLayer e `Lead` no Pixel (se houver),
+6. **Conversão.** Na tela de sucesso: `generate_lead` no dataLayer (o `Lead` do Pixel é uma tag dentro do GTM),
    com `event_id` = `respondent_id`, para deduplicar com um evento de servidor (CAPI) no futuro.
 
 ## 2. Fila (outbox) e retentativa
@@ -65,14 +65,14 @@ Enviados são apagados após 30 dias (`OUTBOX_SENT_RETENTION_DAYS`), pois têm n
 - **Erro de processamento no COMERCIAL responde 200** (`warning`); a LP só percebe pelo corpo.
 - **Rastreamento só na sessão.** Quem clica no anúncio, sai e volta em outra aba/dia perde
   gclid/UTM. Guardar por mais tempo (cookie) depende do texto de LGPD.
-- **Sem CSP.** GTM, Pixel e o player ainda não foram escolhidos; a política certa depende deles.
+- **Sem CSP.** O GTM (container GTM-P9XNXV2B) já está definido, mas o que ele carrega (GA4, Pixel) e o player de vídeo dependem do que for configurado; a política certa sai disso. Hoje não há CSP, então nada é bloqueado.
 - UTM/gclid/fbclid viram campos personalizados, mas **não alimentam** a atribuição nativa do
   COMERCIAL (links `/go/<code>`, Google Ads offline, Meta CAPI).
 
 ## 5. Checklist para PUBLICAR (ainda não feito)
 
 - [ ] Conteúdo final (`pages.ts`), opções (`options.ts`), texto de LGPD e `/privacidade`.
-- [ ] GTM/Pixel (`site.ts`), `ALLOW_INDEXING`, tirar a faixa de exemplo, definir a CSP.
+- [ ] Configurar tags no container GTM (`docs/gtm-eventos.md`), decidir consentimento/LGPD, `ALLOW_INDEXING`, tirar a faixa de exemplo, definir a CSP.
 - [ ] Criar no COMERCIAL (produção): os 10 campos personalizados e as 2 integrações; copiar os
       tokens. Conectar o número por QR "Só disparos" e configurar o grupo no sino da aba Leads.
 - [ ] DNS `lp.rcohub.com` (hoje sem registro; `rcohub.com` aponta para outro host), app no

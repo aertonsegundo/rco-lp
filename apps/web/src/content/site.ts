@@ -12,10 +12,10 @@ export const ALLOW_INDEXING = false;
 /** Faixa "Conteúdo de exemplo" no canto da tela. Desligar junto do conteúdo final. */
 export const SHOW_PLACEHOLDER_BADGE = true;
 
-/** Ex.: "GTM-ABC1234". Vazio = GTM não é carregado. */
-export const GTM_ID = "";
+/** Container do Google Tag Manager. Vazio = GTM não é carregado. Constante (não env) de propósito: ver o topo do arquivo. */
+export const GTM_ID = "GTM-P9XNXV2B";
 
-/** Ex.: "123456789012345". Vazio = Pixel não é carregado. */
+/** DEIXE VAZIO. O Pixel do Meta é configurado dentro do GTM (docs/gtm-eventos.md); preencher aqui o carregaria duas vezes. */
 export const META_PIXEL_ID = "";
 
 /**

@@ -1,0 +1,19 @@
+{
+  "name": "@rco/lead-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Núcleo de captação de lead das LPs: validação, payload do COMERCIAL-RCO, cliente HTTP, fila em arquivos (outbox) e retentativa.",
+  "type": "module",
+  "exports": {
+    "./phone": "./src/phone.ts",
+    "./schema": "./src/schema.ts",
+    "./tracking": "./src/tracking.ts",
+    "./server": "./src/server.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}

@@ -15,9 +15,7 @@ import { cn } from "@/lib/utils";
 // um acordeão exclusivo).
 // ============================================================
 
-type FaqSection = Extract<PageConfig["sections"][number], { kind: "faq" }>;
-
-export function Faq({ heading, items, page }: { heading: string; items: FaqSection["items"]; page: PageId }) {
+export function Faq({ items, page }: { items: PageConfig["faq"]; page: PageId }) {
   const [openIndexes, setOpenIndexes] = useState<Set<number>>(new Set());
 
   const toggle = (index: number) => {
@@ -34,9 +32,8 @@ export function Faq({ heading, items, page }: { heading: string; items: FaqSecti
   };
 
   return (
-    <section id="faq" className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
-      <span aria-hidden="true" className="mx-auto mb-5 block h-1 w-10 rounded-full bg-brand" />
-      <h2 className="mx-auto mb-6 max-w-2xl text-center text-2xl leading-snug font-bold sm:text-3xl">{heading}</h2>
+    <section className="mx-auto max-w-3xl px-5 pb-12 sm:pb-20">
+      <h2 className="mb-6 text-center text-2xl font-bold">Perguntas frequentes</h2>
       <div className="divide-y divide-line rounded-2xl border border-line bg-surface">
         {items.map((f, index) => {
           const open = openIndexes.has(index);
@@ -68,11 +65,7 @@ export function Faq({ heading, items, page }: { heading: string; items: FaqSecti
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="mt-3 space-y-2 text-mute">
-                      {f.a.map((line) => (
-                        <p key={line}>{line}</p>
-                      ))}
-                    </div>
+                    <p className="mt-3 text-mute">{f.a}</p>
                   </motion.div>
                 ) : null}
               </AnimatePresence>

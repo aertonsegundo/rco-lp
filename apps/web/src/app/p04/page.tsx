@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LandingPage } from "@/components/LandingPage";
+import { LandingPageP04 } from "@/components/LandingPageP04";
 import { PAGES } from "@/content/pages";
 
 const page = PAGES.P04;
@@ -7,5 +7,5 @@ const page = PAGES.P04;
 export const metadata: Metadata = { title: page.title, description: page.description };
 
 export default function Page() {
-  return <LandingPage page={page} />;
+  return <LandingPageP04 page={page} />;
 }

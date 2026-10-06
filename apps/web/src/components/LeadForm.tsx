@@ -78,7 +78,10 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
             <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h3 className="text-xl font-bold">{copy.done}</h3>
+        <h3 className="text-xl font-bold">Recebemos seus dados!</h3>
+        <p className="mt-2 text-mute">
+          Texto de exemplo: nosso time comercial vai chamar você no WhatsApp em breve.
+        </p>
       </div>
     );
   }
@@ -99,8 +102,8 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
       className="rounded-2xl border border-line bg-surface p-6 sm:p-8"
       aria-describedby="form-help"
     >
-      <h3 className="text-center text-xl font-bold">{copy.heading}</h3>
-      <p id="form-help" className="mx-auto mt-2 mb-6 max-w-md text-center text-sm text-mute">
+      <h3 className="text-xl font-bold">{copy.heading}</h3>
+      <p id="form-help" className="mt-1 mb-6 text-sm text-mute">
         {copy.text}
       </p>
 
@@ -202,7 +205,7 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
           aqui em vez de ocupar a largura inteira do formulário. */}
       <div className="mt-6 flex justify-center">
         <ShimmerButton type="submit" disabled={sending} width={260} height={52}>
-          {sending ? copy.sending : copy.submit}
+          {sending ? "Enviando…" : copy.submit}
         </ShimmerButton>
       </div>
     </form>

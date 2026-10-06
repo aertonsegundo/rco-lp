@@ -1,5 +1,7 @@
 # GTM e eventos do dataLayer (P04 e P05)
 
+> As páginas voltaram à copy original (commit de base `d27772a`); a copy v2 está guardada em `docs/copy-v2.md` e implementada no commit `35d8393`. Os eventos abaixo valem para as duas versões.
+
 Container: **GTM-P9XNXV2B** (constante `GTM_ID` em `apps/web/src/content/site.ts`, não é variável de ambiente).
 Snippet carregado no layout raiz (`components/tracking/Analytics.tsx`, `next/script` com `beforeInteractive`) e `<noscript>` logo no início do `<body>`.
 
@@ -14,7 +16,7 @@ Todo evento leva `page_id` (`P04`, `P05`; `other` só em `page_view` de rota que
 | Evento | Quando | Parâmetros além de `page_id` |
 |---|---|---|
 | `page_view` | Entrada na página e a cada navegação client-side | `page_path`; `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `gclid`, `fbclid`, `wbraid`, `gbraid` (só os presentes na sessão) |
-| `cta_click` | Clique em qualquer botão que rola ao formulário | `cta_location` (`hero`, `como_funciona`, `chamada_final`), `cta_text` |
+| `cta_click` | Clique em qualquer botão que rola ao formulário | `cta_location` (P04: `resumo_oferta`, o botão depois do FAQ; P05: `chamada_final`, o botão depois do FAQ; `hero` só existe se um hero voltar a ter botão), `cta_text` |
 | `form_start` | Primeiro foco em um campo do formulário (1x por visita) | |
 | `form_submit` | Clique em enviar (tentativa, válida ou não) | |
 | `form_error` | Falha ao enviar | `error_type`: `validation`, `server`, `network`, `rate_limit`; `fields` (só em `validation`: nomes dos campos, ex. `email,whatsapp`) |

@@ -21,14 +21,18 @@ export function Blocks({ blocks, center = false, compact = false }: { blocks: Bl
 function BlockView({ block, center, compact }: { block: Block; center: boolean; compact: boolean }) {
   switch (block.t) {
     case "p":
-      return <p className={cn("text-base leading-relaxed text-mute", !compact && "sm:text-lg")}>{block.text}</p>;
+      return (
+        <p className={cn("text-base leading-relaxed text-mute", !compact && "sm:text-lg", center && "mx-auto max-w-2xl")}>
+          {block.text}
+        </p>
+      );
 
     case "strong":
       return (
         <p
           className={cn(
             "text-lg leading-snug font-semibold text-ink sm:text-xl",
-            !center && "border-l-4 border-brand pl-4",
+            center ? "mx-auto max-w-2xl" : "border-l-4 border-brand pl-4",
           )}
         >
           {block.text}
@@ -37,7 +41,7 @@ function BlockView({ block, center, compact }: { block: Block; center: boolean; 
 
     case "list":
       return (
-        <ul className="grid gap-2.5">
+        <ul className={cn("grid gap-2.5", center && "mx-auto max-w-xl")}>
           {block.items.map((item) => (
             <li key={item} className="flex items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 text-left">
               <span aria-hidden="true" className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-brand/20 text-brand">
@@ -84,7 +88,7 @@ function Flow({ variant, items, center }: { variant: "timeline" | "lines" | "chi
 
   if (variant === "lines") {
     return (
-      <ul className="space-y-2.5 text-left">
+      <ul className={cn("space-y-2.5 text-left", center && "mx-auto w-fit max-w-full")}>
         {items.map((item) => (
           <li key={item} className="border-l-2 border-brand/60 py-0.5 pl-4 text-base leading-snug text-ink sm:text-lg">
             {item}
@@ -96,7 +100,7 @@ function Flow({ variant, items, center }: { variant: "timeline" | "lines" | "chi
 
   // timeline: sequência ligada por uma linha vertical.
   return (
-    <ol className="text-left">
+    <ol className={cn("text-left", center && "mx-auto w-fit max-w-full")}>
       {items.map((item, i) => {
         const last = i === items.length - 1;
         return (

@@ -35,8 +35,8 @@ export function Faq({ heading, items, page }: { heading: string; items: FaqSecti
 
   return (
     <section id="faq" className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
-      <span aria-hidden="true" className="mb-5 block h-1 w-10 rounded-full bg-brand" />
-      <h2 className="mb-6 text-2xl leading-snug font-bold sm:text-3xl">{heading}</h2>
+      <span aria-hidden="true" className="mx-auto mb-5 block h-1 w-10 rounded-full bg-brand" />
+      <h2 className="mx-auto mb-6 max-w-2xl text-center text-2xl leading-snug font-bold sm:text-3xl">{heading}</h2>
       <div className="divide-y divide-line rounded-2xl border border-line bg-surface">
         {items.map((f, index) => {
           const open = openIndexes.has(index);

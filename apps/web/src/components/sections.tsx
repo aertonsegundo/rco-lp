@@ -11,7 +11,7 @@ function Heading({ children, center = false }: { children: React.ReactNode; cent
   return (
     <>
       <span aria-hidden="true" className={cn("mb-5 block h-1 w-10 rounded-full bg-brand", center && "mx-auto")} />
-      <h2 className={cn("mb-6 text-2xl leading-snug font-bold sm:text-3xl", center && "text-center")}>{children}</h2>
+      <h2 className={cn("mb-6 text-2xl leading-snug font-bold sm:text-3xl", center && "mx-auto max-w-2xl text-center")}>{children}</h2>
     </>
   );
 }
@@ -36,8 +36,8 @@ export function PageSections({ sections, page, formId }: { sections: Section[]; 
                 className={cn(band && "border-y border-line/40 bg-surface/25")}
               >
                 <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
-                  <Heading>{s.heading}</Heading>
-                  <Blocks blocks={s.blocks} />
+                  <Heading center>{s.heading}</Heading>
+                  <Blocks blocks={s.blocks} center />
                 </div>
               </section>
             );
@@ -46,8 +46,8 @@ export function PageSections({ sections, page, formId }: { sections: Section[]; 
             return (
               <section key={s.id} id={s.id}>
                 <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
-                  <Heading>{s.heading}</Heading>
-                  <ol>
+                  <Heading center>{s.heading}</Heading>
+                  <ol className="mx-auto max-w-xl">
                     {s.items.map((step, i) => {
                       const last = i === s.items.length - 1;
                       return (

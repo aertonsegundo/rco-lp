@@ -99,8 +99,8 @@ export function LeadForm({ page, copy }: { page: PageId; copy: PageConfig["form"
       className="rounded-2xl border border-line bg-surface p-6 sm:p-8"
       aria-describedby="form-help"
     >
-      <h3 className="text-xl font-bold">{copy.heading}</h3>
-      <p id="form-help" className="mt-1 mb-6 text-sm text-mute">
+      <h3 className="text-center text-xl font-bold">{copy.heading}</h3>
+      <p id="form-help" className="mx-auto mt-2 mb-6 max-w-md text-center text-sm text-mute">
         {copy.text}
       </p>
 

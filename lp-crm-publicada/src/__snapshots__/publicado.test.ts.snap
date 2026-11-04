@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rastreamento no HTML > CTAs medidos continuam com os mesmos data-cta / data-plan 1`] = `
+{
+  "ctas": [
+    "cta_principal@fechamento",
+    "entrar_crm@rodape",
+  ],
+  "plans": [
+    "essencial",
+    "profissional",
+    "personalizado",
+  ],
+}
+`;

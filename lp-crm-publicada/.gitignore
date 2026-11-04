@@ -1,0 +1,4 @@
+node_modules
+dist
+# Vídeo do hero (10 MB): baixado do ar com `npm run baixar-video`, fora do Git (repositório público).
+public/video/*.mp4

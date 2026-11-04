@@ -822,6 +822,8 @@ summary:focus-visible {
   cursor: pointer;
   border-radius: 999px;
   flex: none;
+  /* Bloco 3 da especificação Opalê: área de toque mínima de 44 px no celular. */
+  min-height: 44px;
   padding: 0.6rem 1.1rem;
   transition:
     background var(--motion-fast) var(--motion-ease),

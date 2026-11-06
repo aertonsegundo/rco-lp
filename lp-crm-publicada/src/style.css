@@ -1,56 +1,20 @@
-/* ============================================================
-   TOKENS OPALÊ: espelho EXATO do bloco de tokens das outras páginas da Opalê
-   (landingpages/RCO, apps/web/src/app/theme-opale.css, branch opale-rebrand): mesma paleta do
-   manual, mesma fonte (General Sans), mesma forma (campo 56 px raio 12, botão 52 px pílula,
-   cartão raio 16, foco ouro 2 px) e mesmo movimento (150 a 300 ms). Trocar identidade = editar
-   só este bloco (e o espelho nas outras páginas).
-   ============================================================ */
 :root {
-  /* ---- Paleta do manual ---- */
-  --opale-ouro: #c9921a;
-  --opale-noite: #0d0d1a;
-  --opale-branco: #ffffff;
-  --opale-azul: #1f3c8c;
-  --opale-marinho: #1b1e40;
-  --opale-grafite: #15182f;
-  --opale-bronze: #2c231d;
-  --opale-gradiente: linear-gradient(100deg, var(--opale-ouro) 0%, var(--opale-bronze) 26%, var(--opale-noite) 46%, var(--opale-azul) 74%, var(--opale-marinho) 100%);
-
-  /* ---- Forma ---- */
-  --field-h: 56px;
-  --field-radius: 12px;
-  --btn-h: 52px;
-  --btn-radius: 999px;
-  --card-radius: 16px;
-  --focus-width: 2px;
-  --motion-fast: 150ms;
-  --motion: 250ms;
-  --motion-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-
-  /* ---- Fonte do manual (General Sans, Fontshare, licença ITF FFL; carregada pela API no <head>) ---- */
-  --font-opale: "General Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-  /* ---- Papéis usados por esta página ---- */
-  --brand: var(--opale-ouro);
-  --on-brand: var(--opale-noite);
-  --brand-hover: color-mix(in srgb, var(--opale-ouro) 82%, var(--opale-branco));
-  --brand-tint: color-mix(in srgb, var(--opale-ouro) 14%, var(--opale-grafite));
-  --ink: var(--opale-branco);
-  --ink-soft: color-mix(in srgb, var(--opale-branco) 72%, var(--opale-noite));
-  --ink-faint: color-mix(in srgb, var(--opale-branco) 52%, var(--opale-noite));
-  --paper: var(--opale-noite);
-  --surface: var(--opale-grafite);
-  --surface-2: var(--opale-marinho);
-  --soft: color-mix(in srgb, var(--opale-marinho) 40%, var(--opale-noite));
-  --line: color-mix(in srgb, var(--opale-branco) 14%, var(--opale-noite));
-  --dark: var(--opale-noite);
-  --glow: var(--opale-azul);
-  --font: var(--font-opale);
-
-  /* Nomes lidos pelo JS publicado (public/assets/lp-*.js, cores dos raios do fluxo), que não se
-     mexe: ficam só como apelidos dos tokens Opalê. */
-  --rco-blue: var(--opale-ouro);
-  --rco-blue-light: var(--opale-branco);
+  --rco-blue: #0d67f0;
+  --rco-blue-hover: #0a52c4;
+  --rco-blue-tint: #0f1f3d;
+  --rco-blue-light: #5b9dff;
+  --ink: #f2f6fc;
+  --ink-soft: #a3b2c9;
+  --ink-faint: #6f7f99;
+  --paper: #000;
+  --surface: #0a0f19;
+  --surface-2: #0e1522;
+  --soft: #04080f;
+  --line: #1a2436;
+  --dark: #020611;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lightningcss-light: ;
+  --lightningcss-dark: initial;
   color-scheme: dark;
 }
 *,
@@ -152,7 +116,7 @@ h3 {
   display: inline-flex;
 }
 .nav__links a:hover {
-  color: var(--brand);
+  color: var(--rco-blue);
 }
 .nav__actions {
   align-items: center;
@@ -176,11 +140,11 @@ h3 {
   cursor: default;
 }
 .btn {
-  min-height: var(--btn-h);
+  min-height: 3.25rem;
   font: inherit;
   cursor: pointer;
   border: 0;
-  border-radius: var(--btn-radius);
+  border-radius: 999px;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
@@ -189,15 +153,9 @@ h3 {
   font-weight: 600;
   text-decoration: none;
   transition:
-    background-color var(--motion-fast) var(--motion-ease),
-    box-shadow var(--motion) var(--motion-ease),
-    transform var(--motion) var(--motion-ease);
+    background-color 0.15s,
+    box-shadow 0.15s;
   display: inline-flex;
-}
-@media (hover: hover) {
-  .btn:not([aria-disabled="true"]):hover {
-    transform: translateY(-2px);
-  }
 }
 .btn--sm {
   min-height: 2.75rem;
@@ -205,14 +163,14 @@ h3 {
   font-size: 0.875rem;
 }
 .btn--primary {
-  background: var(--brand);
-  color: var(--on-brand);
+  background: var(--rco-blue);
+  color: #fff;
   box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--opale-ouro) 22%, transparent),
-    0 10px 30px -10px color-mix(in srgb, var(--opale-ouro) 70%, transparent);
+    0 0 0 4px #0d67f038,
+    0 10px 30px -10px #0d67f0b3;
 }
 .btn--primary:hover {
-  background: var(--brand-hover);
+  background: var(--rco-blue-hover);
 }
 .btn--primary:after {
   content: "→";
@@ -226,35 +184,35 @@ h3 {
   color: var(--ink);
 }
 .btn--soft:hover {
-  background: color-mix(in srgb, var(--opale-branco) 8%, var(--opale-marinho));
+  background: #162033;
 }
 .btn--light {
-  color: var(--opale-noite);
-  background: var(--opale-branco);
+  color: var(--rco-blue-hover);
+  background: #fff;
 }
 .btn--light:hover {
-  background: color-mix(in srgb, var(--opale-branco) 86%, var(--opale-ouro));
+  background: var(--rco-blue-tint);
 }
 a:focus-visible {
-  outline: var(--focus-width) solid var(--opale-ouro);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
 }
 button:focus-visible {
-  outline: var(--focus-width) solid var(--opale-ouro);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
 }
 summary:focus-visible {
-  outline: var(--focus-width) solid var(--opale-ouro);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
 }
 .closing a:focus-visible {
-  outline-color: var(--opale-ouro);
+  outline-color: #fff;
 }
 .dive--dark a:focus-visible {
-  outline-color: var(--opale-ouro);
+  outline-color: #fff;
 }
 .hero {
-  background: var(--paper);
+  background: radial-gradient(90% 70% at 50% 0, #eaf3ff 0%, #fff0 70%);
   padding: 3rem 0 2rem;
 }
 .hero__inner {
@@ -296,7 +254,7 @@ summary:focus-visible {
   width: 100%;
   margin: 3rem 0 0;
   overflow: hidden;
-  box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--glow) 35%, transparent);
+  box-shadow: 0 30px 60px -30px #0b1b3359;
 }
 .hero--video {
   background: #000;
@@ -345,10 +303,10 @@ summary:focus-visible {
 }
 .section--soft {
   background: var(--fade),
-    radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--glow) 40%, transparent) 0%, #0000 70%), var(--soft);
+    radial-gradient(60% 50% at 50% 0%, #0d67f024 0%, #0000 70%), var(--soft);
 }
 .eyebrow {
-  color: var(--brand);
+  color: var(--rco-blue-light);
   margin: 0 0 0.75rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -384,12 +342,12 @@ summary:focus-visible {
 .pillar {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--card-radius);
+  border-radius: 20px;
   flex-direction: column;
   padding: 1.75rem 1.75rem 0;
   display: flex;
   overflow: hidden;
-  box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--glow) 60%, transparent);
+  box-shadow: 0 20px 40px -24px #0d67f059;
 }
 .pillar h3 {
   letter-spacing: -0.02em;
@@ -404,8 +362,8 @@ summary:focus-visible {
 }
 .pillar__art {
   border-top: 1px solid var(--line);
-  background: radial-gradient(80% 90% at 50% 100%, color-mix(in srgb, var(--opale-ouro) 16%, transparent), #0000 70%),
-    var(--opale-noite);
+  background: radial-gradient(80% 90% at 50% 100%, #0d67f038, #0000 70%),
+    #070c16;
   margin: auto -1.75rem 0;
   padding: 1.5rem 1.25rem 1.25rem;
 }
@@ -434,7 +392,7 @@ summary:focus-visible {
   z-index: -1;
   filter: blur(28px);
   pointer-events: none;
-  background: radial-gradient(50% 50% at 50% 60%, color-mix(in srgb, var(--glow) 85%, transparent), transparent 100%);
+  background: radial-gradient(50% 50% at 50% 60%, #0d67f08c, #0d67f000 100%);
   height: 55%;
   position: absolute;
   bottom: -10%;
@@ -442,10 +400,10 @@ summary:focus-visible {
   right: 6%;
 }
 .dive__visual img {
-  border: 1px solid var(--line);
+  border: 1px solid #1f2a3d;
   border-radius: 14px;
   width: 100%;
-  box-shadow: 0 40px 80px -40px color-mix(in srgb, var(--glow) 90%, transparent);
+  box-shadow: 0 40px 80px -40px #0d67f0b3;
 }
 .dive__visual--tall img {
   width: auto;
@@ -473,20 +431,20 @@ summary:focus-visible {
   display: flex;
 }
 .check {
-  color: var(--brand);
+  color: var(--rco-blue);
   flex-shrink: 0;
   margin-top: 0.125rem;
 }
 .dive--dark {
   background: var(--fade),
-    radial-gradient(60% 70% at 70% 50%, color-mix(in srgb, var(--glow) 45%, transparent), #0000 70%), var(--dark);
-  color: var(--ink);
+    radial-gradient(60% 70% at 70% 50%, #0d67f033, #0000 70%), var(--dark);
+  color: #fff;
 }
 .dive--dark .eyebrow {
-  color: var(--brand);
+  color: #8db6ff;
 }
 .dive--dark .check {
-  color: var(--brand);
+  color: var(--rco-blue);
 }
 .dive--dark .dive__visual .art {
   width: 100%;
@@ -504,8 +462,8 @@ summary:focus-visible {
   display: flex;
 }
 .step__n {
-  background: var(--brand);
-  color: var(--on-brand);
+  background: var(--rco-blue);
+  color: #fff;
   border-radius: 50%;
   flex-shrink: 0;
   place-items: center;
@@ -534,21 +492,21 @@ summary:focus-visible {
 .plan {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--card-radius);
+  border-radius: 20px;
   flex-direction: column;
   padding: 1.75rem;
   display: flex;
   position: relative;
 }
 .plan--highlight {
-  border: 2px solid var(--brand);
-  background: linear-gradient(180deg, var(--brand-tint), var(--surface) 45%);
+  border: 2px solid var(--rco-blue);
+  background: linear-gradient(180deg, var(--rco-blue-tint), var(--surface) 45%);
   order: -1;
-  box-shadow: 0 24px 60px -28px color-mix(in srgb, var(--opale-ouro) 55%, transparent);
+  box-shadow: 0 24px 60px -28px #0d67f099;
 }
 .plan__badge {
-  background: var(--brand);
-  color: var(--on-brand);
+  background: var(--rco-blue);
+  color: #fff;
   letter-spacing: 0.08em;
   border-radius: 999px;
   align-self: flex-start;
@@ -586,7 +544,7 @@ summary:focus-visible {
   font-size: 0.875rem;
 }
 .plan--highlight .plan__per {
-  color: var(--brand);
+  color: var(--rco-blue-light);
   font-weight: 600;
 }
 .plan__items {
@@ -606,7 +564,7 @@ summary:focus-visible {
 .plan__items .check {
   width: 18px;
   height: 18px;
-  color: var(--brand);
+  color: var(--rco-blue);
   flex-shrink: 0;
   margin-top: 0.1em;
 }
@@ -623,7 +581,7 @@ summary:focus-visible {
 }
 .plan__note {
   color: var(--ink);
-  background: color-mix(in srgb, var(--opale-ouro) 12%, transparent);
+  background: #0d67f01f;
   border-radius: 12px;
   margin: 1rem 0 0;
   padding: 0.875rem 1rem;
@@ -633,11 +591,11 @@ summary:focus-visible {
 }
 .btn--outline {
   color: var(--ink);
-  box-shadow: inset 0 0 0 1.5px var(--brand);
+  box-shadow: inset 0 0 0 1.5px var(--rco-blue);
   background: 0 0;
 }
 .btn--outline:hover {
-  background: color-mix(in srgb, var(--opale-ouro) 12%, transparent);
+  background: #0d67f01f;
 }
 .btn[aria-disabled="true"] {
   cursor: default;
@@ -645,7 +603,7 @@ summary:focus-visible {
 .plans__pending {
   background: var(--surface);
   color: var(--ink-soft);
-  border: 1px dashed var(--line);
+  border: 1px dashed #2a3850;
   border-radius: 16px;
   margin: 0;
   padding: 1.5rem;
@@ -682,7 +640,7 @@ summary:focus-visible {
   background: var(--surface);
   border: 1px solid var(--line);
   box-shadow: none;
-  border-radius: var(--card-radius);
+  border-radius: 14px;
   padding: 0 1.25rem;
 }
 .faq__item summary {
@@ -722,13 +680,10 @@ summary:focus-visible {
   list-style: none;
   display: grid;
 }
-/* Mesmo fundo do hero das outras LPs: ouro embaixo à esquerda, azul em cima à direita, sobre a noite. */
 .closing {
-  color: var(--ink);
-  background:
-    radial-gradient(70% 90% at 0% 100%, color-mix(in srgb, var(--opale-ouro) 30%, transparent) 0%, transparent 70%),
-    radial-gradient(70% 100% at 100% 0%, color-mix(in srgb, var(--opale-azul) 75%, transparent) 0%, transparent 72%),
-    var(--opale-noite);
+  color: #fff;
+  background: radial-gradient(70% 120% at 80% 0, #2f80ff 0%, #0d67f000 60%),
+    linear-gradient(135deg, #0a4fc0, #06286a);
   padding: 4rem 0;
 }
 .closing__inner {
@@ -745,7 +700,7 @@ summary:focus-visible {
   line-height: 1.15;
 }
 .closing__text {
-  color: color-mix(in srgb, var(--opale-branco) 85%, transparent);
+  color: #ffffffd9;
   max-width: 48ch;
   margin: -0.75rem 0 0;
   font-size: 1.0625rem;
@@ -781,14 +736,13 @@ summary:focus-visible {
   background: var(--surface);
   border: 1px solid var(--line);
   text-align: center;
-  border-radius: var(--card-radius);
+  border-radius: 20px;
   width: 100%;
   max-width: 30rem;
   padding: 2rem 1.5rem;
 }
 .status-card img {
   width: 40px;
-  height: auto;
   margin: 0 auto 1.25rem;
 }
 .status-card h1 {
@@ -822,25 +776,25 @@ summary:focus-visible {
   cursor: pointer;
   border-radius: 999px;
   flex: none;
-  /* Bloco 3 da especificação Opalê: área de toque mínima de 44 px no celular. */
+  /* Área de toque mínima de 44 px no celular. */
   min-height: 44px;
   padding: 0.6rem 1.1rem;
   transition:
-    background var(--motion-fast) var(--motion-ease),
-    color var(--motion-fast) var(--motion-ease),
-    border-color var(--motion-fast) var(--motion-ease);
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 .tour__tab:hover {
   color: var(--ink);
-  border-color: color-mix(in srgb, var(--opale-ouro) 50%, transparent);
+  border-color: #2b3d5c;
 }
 .tour__tab[aria-selected="true"] {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: var(--on-brand);
+  background: var(--rco-blue);
+  border-color: var(--rco-blue);
+  color: #fff;
 }
 .tour__tab:focus-visible {
-  outline: var(--focus-width) solid var(--opale-ouro);
+  outline: 3px solid var(--rco-blue);
   outline-offset: 2px;
 }
 .tour__panel {
@@ -848,22 +802,22 @@ summary:focus-visible {
   display: grid;
 }
 .screen {
-  background: var(--opale-noite);
-  border: 1px solid var(--line);
-  border-radius: var(--card-radius);
+  background: #0b0f17;
+  border: 1px solid #1f2633;
+  border-radius: 14px;
   margin: 0;
   overflow: hidden;
-  box-shadow: 0 40px 90px -40px color-mix(in srgb, var(--glow) 80%, transparent);
+  box-shadow: 0 40px 90px -40px #0d67f099;
 }
 .screen__bar {
-  background: var(--opale-grafite);
-  border-bottom: 1px solid var(--line);
+  background: #151a23;
+  border-bottom: 1px solid #1f2633;
   gap: 6px;
   padding: 10px 14px;
   display: flex;
 }
 .screen__bar i {
-  background: color-mix(in srgb, var(--opale-branco) 20%, var(--opale-grafite));
+  background: #2f3747;
   border-radius: 50%;
   width: 10px;
   height: 10px;
@@ -1011,24 +965,22 @@ summary:focus-visible {
     grid-area: 1/2 / span 2;
   }
 }
-/* Entrada ao rolar (uma vez só; quem marca é o JS publicado): duração de 300 ms e deslize de 16 px,
-   iguais às outras páginas da Opalê. O atraso escalonado do JS (90 ms por item) cai para um terço. */
 .js-reveal [data-reveal] {
   opacity: 0;
   transition:
-    opacity var(--motion) var(--motion-ease),
-    transform 300ms var(--motion-ease);
-  transition-delay: calc(var(--reveal-delay, 0s) / 3);
+    opacity 0.7s,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0s);
   will-change: opacity, transform;
 }
 .js-reveal [data-reveal="up"] {
-  transform: translateY(16px);
+  transform: translateY(32px);
 }
 .js-reveal [data-reveal="left"] {
-  transform: translate(-16px);
+  transform: translate(-48px) scale(0.98);
 }
 .js-reveal [data-reveal="right"] {
-  transform: translate(16px);
+  transform: translate(48px) scale(0.98);
 }
 .js-reveal [data-reveal].is-in {
   opacity: 1;
@@ -1046,7 +998,7 @@ summary:focus-visible {
 }
 .tour__panel:not([hidden]) .screen,
 .tour__panel:not([hidden]) .tour__text {
-  animation: 0.3s both tour-in;
+  animation: 0.45s both tour-in;
 }
 .tour__panel:not([hidden]) .screen {
   animation-delay: 60ms;
@@ -1085,8 +1037,8 @@ summary:focus-visible {
   }
 }
 .flow {
-  --flow-ok: var(--opale-branco);
-  --flow-amber: var(--opale-ouro);
+  --flow-ok: #3ddc97;
+  --flow-amber: #f59e0b;
   width: 100%;
   max-width: 48rem;
   margin: 0 auto;
@@ -1145,13 +1097,13 @@ summary:focus-visible {
   color: var(--ink-soft);
 }
 .flow__node--agent .flow__icon {
-  color: var(--brand);
+  color: var(--rco-blue);
 }
 .flow__node--comercial .flow__icon {
   color: var(--flow-ok);
 }
 .flow__node--pixel .flow__icon {
-  color: var(--ink);
+  color: var(--rco-blue-light);
 }
 .flow__node--base .flow__icon {
   color: var(--flow-amber);
@@ -1182,7 +1134,7 @@ summary:focus-visible {
   height: 1rem;
 }
 .flow__crm {
-  border: 1px dashed color-mix(in srgb, var(--opale-ouro) 45%, transparent);
+  border: 1px dashed #0d67f066;
   border-radius: 1rem;
   flex: 1;
   padding: 1.5rem 0.25rem 0.25rem;
@@ -1193,8 +1145,8 @@ summary:focus-visible {
   background: var(--dark);
   letter-spacing: 0.025em;
   text-transform: uppercase;
-  color: var(--ink);
-  border: 1px solid color-mix(in srgb, var(--opale-branco) 40%, transparent);
+  color: #fff;
+  border: 1px solid #fff6;
   border-radius: 999px;
   padding: 0.125rem 0.5rem;
   font-size: 8px;
@@ -1301,134 +1253,4 @@ summary:focus-visible {
     font-size: 10px;
     top: -0.75rem;
   }
-}
-
-/* ============================================================
-   OPALÊ: acréscimos do rebrand
-   ============================================================ */
-
-/* Ilustrações dos pilares (SVG publicado, cores fixas nos atributos): repintadas pelos tokens. */
-.art [fill="#0d67f0"] {
-  fill: var(--brand);
-}
-.art [stroke="#0d67f0"] {
-  stroke: var(--brand);
-}
-.art [fill="#0e1729"] {
-  fill: var(--opale-grafite);
-}
-.art [stroke="#24375a"] {
-  stroke: var(--line);
-}
-.art [fill="#1d2d4a"] {
-  fill: color-mix(in srgb, var(--opale-branco) 12%, var(--opale-grafite));
-}
-.art [fill="#fff"] {
-  fill: var(--on-brand);
-}
-/* Visto no círculo ouro: traço na cor da noite, para contraste. */
-.check path {
-  stroke: var(--on-brand);
-}
-
-/* Cartões: leve subida e borda ouro no hover (mesmo efeito das outras LPs). */
-.pillar,
-.plan,
-.faq__item,
-.opala-card {
-  transition:
-    border-color var(--motion) var(--motion-ease),
-    transform var(--motion) var(--motion-ease);
-}
-@media (hover: hover) {
-  .pillar:hover,
-  .opala-card:hover {
-    border-color: color-mix(in srgb, var(--opale-ouro) 70%, transparent);
-    transform: translateY(-3px);
-  }
-  .faq__item:hover {
-    border-color: color-mix(in srgb, var(--opale-ouro) 45%, transparent);
-  }
-}
-
-/* Método OPALA: cinco cartões com a letra centralizada. 1 coluna no celular, 2 no tablet, 5 no computador. */
-.opala {
-  text-align: center;
-}
-.opala .section__title {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 0.75rem;
-}
-.opala__sub {
-  color: var(--ink-soft);
-  max-width: 40rem;
-  margin: 0 auto 2rem;
-}
-.opala__list {
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-}
-.opala-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--card-radius);
-  padding: 1.5rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.opala-card__letter {
-  color: var(--brand);
-  font-size: 3.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-.opala-card__name {
-  margin: 0.75rem 0 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-.opala-card__text {
-  color: var(--ink-soft);
-  margin: 0.5rem 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
-@media (min-width: 640px) {
-  .opala__list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .opala-card:last-child {
-    grid-column: 1 / -1;
-  }
-}
-@media (min-width: 960px) {
-  .opala__list {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1rem;
-  }
-  .opala-card:last-child {
-    grid-column: auto;
-  }
-  .opala-card__letter {
-    font-size: 4rem;
-  }
-}
-
-/* Rodapé: logo da Opalê e direitos. */
-.footer__brand {
-  align-items: center;
-  gap: 1rem;
-  display: inline-flex;
-  flex-wrap: wrap;
-}
-.footer__logo {
-  width: auto;
-  height: 44px;
 }
